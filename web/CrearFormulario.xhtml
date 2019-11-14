@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Crear Formularios</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <style type="text/css">
+            .value {
+                font-weight: bold;
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <p:panel header="Crear formulario" style="text-align: center; width: 100%">
+
+            <h:form id="formularios" style="width: 100%; border: black solid 2px;margin: 0 auto;" >
+
+                <p:panelGrid style="width: 100%; margin: 0 auto;" columns="1">
+
+                    <p:outputLabel value="Ingrese el nombre del formulario" style="margin: 5px 5px; font-size: 40px;"/>
+
+                    <p:inputText placeholder="Nombre del formulario" style=" width: 90%;"/>
+
+                </p:panelGrid>
+
+
+                <p:dataTable var="seccion" value="#{dataTableController.listaSecciones}" rendered="#{dataTableController.listaSecciones.size() > 0 eq true}" style="margin: 20px auto;" >
+                    <p:column headerText="Preguntas">
+                        <p:panelGrid columns="1" style="margin: 10px ;">
+                            <p:outputLabel value="#{seccion.pregunta}" />
+                            <p:selectOneRadio id="opciones" unselectable="true" style="margin: 0 auto;" >
+
+                                <f:selectItem itemValue="#{seccion.respuestas[0]}" itemLabel="#{seccion.respuestas[0]}" />
+                                <f:selectItem itemValue="#{seccion.respuestas[1]}" itemLabel="#{seccion.respuestas[1]}" />
+                                <f:selectItem itemValue="#{seccion.respuestas[2]}" itemLabel="#{seccion.respuestas[2]}" />
+                                <f:selectItem itemValue="#{seccion.respuestas[3]}" itemLabel="#{seccion.respuestas[3]}" />
+
+                            </p:selectOneRadio>
+                        </p:panelGrid>
+                    </p:column>
+                </p:dataTable>
+                <p:remoteCommand actionListener="#{dataTableController.llenarListaSeccion()}" name="rc" update="@form"/>
+                <p:dataTable var="seccion" value="#{dataTableController.listaSeccionesTexto}" rendered="#{dataTableController.listaSeccionesTexto.size() > 0 eq true}" style="margin: 20px auto;">
+
+                    <p:column >
+
+                        <p:panelGrid columns="1">
+                            <p:outputLabel value="#{seccion.pregunta}" />
+                            <p:inputText placeholder="Respuesta:" value="#{dataTableController.respuesta}" style="width: 90%;"/>
+                        </p:panelGrid>
+
+                    </p:column>
+                </p:dataTable>
+                <p:remoteCommand name="rc2" actionListener="#{dataTableController.llenarListaOpcionTexto()}" update="@form"/>
+                
+                <h:panelGrid columns="3" style="align-content: center; justify-content: center; display: flex; width: 100%">
+                    <p:commandButton value="+" action="#{controllerFormulario.seleccionFormulario()}" update="@form" />
+                    <p:commandButton value="-" action="#{controllerFormulario.esconder()}" update="@form" />
+                    <br/>
+                    <p:outputLabel for="@next" value="Tipo de Pregunta:" />
+
+                    <p:selectOneMenu value="#{controllerFormulario.tipo}" style="width:100%;">
+                        <f:selectItem itemLabel="Seleccione uno" itemValue="" />
+                        <f:selectItem itemLabel="Seleccion Multiple" itemValue="Seleccion Multiple" />
+                        <f:selectItem itemLabel="Texto" itemValue="Texto" />
+                    </p:selectOneMenu>
+
+                </h:panelGrid>
+
+                <h:form style="width: 50%; border: black solid 2px;margin: 10px auto;" rendered="#{controllerFormulario.textoRendered}">
+                    <p:panelGrid style="width: 100%; margin: 10px auto;" columns="1">
+                        <p:inputText placeholder="Pregunta:" value="#{dataTableController.pregunta}" style=" width: 90%;"/>
+                        <p:inputTextarea placeholder="Respuesta:" value="#{dataTableController.opcion1}" rows="6" cols="33" style=" width: 90%;" />
+                        <p:commandButton value="Agregar" onclick="rc2()" update="@form"/>
+                    </p:panelGrid>
+
+                </h:form> 
+
+                <h:form style="width: 50%; border: black solid 2px;margin: 10px auto;" rendered="#{controllerFormulario.seleccionMultipleRendered}">
+                    <p:panelGrid style="width: 100%; margin: 10px auto;" columns="1">
+                        <p:inputText placeholder="Pregunta:" value="#{dataTableController.pregunta}" style=" width: 90%;"/>
+                    </p:panelGrid>
+                    <p:panelGrid style="width: 100%; margin: 10px auto;" columns="2">
+                        <p:inputText placeholder="Opcion 1:" value="#{dataTableController.opcion1}" />
+                        <p:inputText placeholder="Opcion 2:" value="#{dataTableController.opcion2}" />
+                        <p:inputText placeholder="Opcion 3:" value="#{dataTableController.opcion3}" />
+                        <p:inputText placeholder="Opcion 4:" value="#{dataTableController.opcion4}" />
+                    </p:panelGrid>
+                    <p:commandButton value="Agregar" onclick="rc()" update="@form"/>
+                </h:form>
+
+            </h:form>
+
+        </p:panel>
+
+    </h:body>
+</html>
