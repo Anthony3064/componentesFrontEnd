@@ -28,7 +28,7 @@ public class RegistroController {
         this.user.setConstrania(this.password);
         this.user.setNombre(this.username);
         
-        if (this.username == "" || this.email == "" || this.password == "") {
+        if (this.username.equalsIgnoreCase("") || this.email.equalsIgnoreCase("") || this.password.equalsIgnoreCase("")) {
                 
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Se debe llenar todos los campos.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -45,6 +45,7 @@ public class RegistroController {
             this.email = "";
             this.username = "";
             this.password = "";
+            this.user = null;
               
         }
         
