@@ -25,6 +25,35 @@ public class LoginController {
     private String password;
     private Usuario user = new Usuario();
 
+    public LoginController() {
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Usuario getUser() {
+        return user;
+    }
+
+    public void setUser(Usuario user) {
+        this.user = user;
+    }
+    
+    
+
     public void login(){
         
         UsuarioController uc = new UsuarioController();
@@ -56,5 +85,22 @@ public class LoginController {
                     }
            
      }
+     
+     public void redireccionARegistro(){
+                    try {
+           
+            HttpServletRequest request = (HttpServletRequest) FacesContext
+                    .getCurrentInstance().getExternalContext().getRequest();
+            FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .redirect(
+                            request.getContextPath()
+                            + "/faces/Registro.xhtml?faces-redirect=true"); 
+            }
+                    catch (IOException e) {
+                    }
+           
+     }     
     
 }

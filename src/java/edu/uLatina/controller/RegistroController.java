@@ -2,10 +2,12 @@
 package edu.uLatina.controller;
 import com.componentes.entidades.Usuario;
 import com.componentes.dao.UsuarioDAO;
+import java.io.IOException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -17,13 +19,15 @@ public class RegistroController {
     private String email;
     private String username;
     private String password;
-    private Usuario user = new Usuario();
+    private Usuario user = null;
 
     public RegistroController() {
     }
     
     public void realizarRegistro(){
     
+        this.user = new Usuario();
+        
         this.user.setCorreo(this.email);
         this.user.setConstrania(this.password);
         this.user.setNombre(this.username);
@@ -47,6 +51,7 @@ public class RegistroController {
             this.password = "";
             this.user = null;
               
+            this.redireccionALogin();
         }
         
     }
@@ -189,4 +194,21 @@ public class RegistroController {
     public void setUser(Usuario user) {
         this.user = user;
     }
+    
+     public void redireccionALogin(){
+                    try {
+           
+            HttpServletRequest request = (HttpServletRequest) FacesContext
+                    .getCurrentInstance().getExternalContext().getRequest();
+            FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .redirect(
+                            request.getContextPath()
+                            + "/faces/Login.xhtml?faces-redirect=true"); 
+            }
+                    catch (IOException e) {
+                    }
+           
+     }     
 }
