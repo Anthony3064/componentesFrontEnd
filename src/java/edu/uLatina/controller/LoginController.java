@@ -4,14 +4,16 @@
  * and open the template in the editor.
  */
 
-import com.componentes.controlador.UsuarioController;
+package edu.uLatina.controller;
+
+import com.componentes.dao.UsuarioDAO;
 import com.componentes.entidades.Usuario;
-import java.io.IOException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+
 /**
  *
  * @author Kainthel
@@ -23,7 +25,7 @@ public class LoginController {
     //Parametros para el usuario
     private String username; //Estos se consiguen directamente del login page ("index.html")
     private String password;
-    private Usuario user = new Usuario();
+    private Usuario user = null;
 
     public LoginController() {
     }
@@ -56,16 +58,34 @@ public class LoginController {
 
     public void login(){
         
-           UsuarioDAO ud = new UsuarioDAO();
+        
+        if (this.username.equalsIgnoreCase("") || this.password.equalsIgnoreCase("")) {
+            
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe llenar todos los campos.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            
+        }else{
+         
+        UsuarioDAO uDao = new UsuarioDAO();
+        
         //Busca si el username y password esta en la database
-        if ((((Usuario)ud.getUsuario(1,user)).getNombre().equals(username)) && (((Usuario)ud.getUsuario(1,user)).getConstrania().equals(password))) { 
-                user = (Usuario)ud.getUsuario(1,user);
-                this.redireccionALandingPage(user); //si es valido el user lo manda a meterse al landing page
-            }else{ //en caso de login fallido, usuario invalido, etc...
-                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario o contraseña incorrecta.");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
+                
+        this.user = (Usuario)uDao.login(this.username, this.password);
+                
+        if (user != null){
                     
+            this.redireccionALandingPage(user); //si es valido el user lo manda a meterse al landing page
+            
+        }else{
+            //en caso de login fallido, usuario invalido, etc...
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario o contraseña incorrecta.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            this.password = "";
+            this.username = "";
+            this.user = null;
         }
+      }
+        
     }
     
      public void redireccionALandingPage(Usuario u){
@@ -78,9 +98,10 @@ public class LoginController {
                     .getExternalContext()
                     .redirect(
                             request.getContextPath()
-                            + "/faces/landingPage.xhtml?faces-redirect=true");  //Aqui deberia ir a la Landing Page pero pues aun no existe
+                            + "/faces/LandingPage.xhtml?faces-redirect=true");  //Aqui deberia ir a la Landing Page pero pues aun no existe
             }
-                    catch (IOException e) {
+                    catch (Exception e) {
+                        e.printStackTrace();
                     }
            
      }
@@ -97,7 +118,8 @@ public class LoginController {
                             request.getContextPath()
                             + "/faces/Registro.xhtml?faces-redirect=true"); 
             }
-                    catch (IOException e) {
+                    catch (Exception e) {
+                        e.printStackTrace();
                     }
            
      }     

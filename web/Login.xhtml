@@ -42,6 +42,10 @@
     <h:body>
 
         <h:form style="margin: 350px auto; width: 50%; align-items: center; text-align: left;">
+            
+            <p:messages id="msg" showDetail="true" closable="true">
+                <p:autoUpdate />
+            </p:messages>
 
             <h1 style="font-weight: bold; width: 100%; color: white; text-align: center" >Ingreso al sistema</h1>
             <br></br>
@@ -52,7 +56,7 @@
                 <p:outputLabel class="label" for="float-input2" value="Contraseña: " />
                 <p:password class="inputText" id="float-input2" value="#{loginController.password}" />
                 <h:panelGrid columns="1" style="margin: -20px auto;width: 100%; display: flex; justify-content:" cellpadding="2">
-                    <p:commandButton class="btn" style="margin: 20px 0 20px 0;" value="Ingresar" actionListener="#{loginController.login()}"/>
+                    <p:commandButton class="btn" style="margin: 20px 0 20px 0;" value="Ingresar" actionListener="#{loginController.login()}" update="@form"/>
                 </h:panelGrid>
                 <p:commandLink class="label" value="No tiene cuenta?" actionListener="#{loginController.redireccionARegistro()}"/>
             </h:panelGrid>

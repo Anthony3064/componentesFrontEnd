@@ -3,6 +3,7 @@ package edu.uLatina.controller;
 import com.componentes.entidades.Usuario;
 import com.componentes.dao.UsuarioDAO;
 import java.io.IOException;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -37,8 +38,18 @@ public class RegistroController {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Se debe llenar todos los campos.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
        
-        }else{
+        }else if(this.comprobarCorreoExistenteEnBaseDeDatos(this.email) == true){
         
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Este correo ya está en uso.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            
+        }else if(this.comprobarNombreUsuarioExistenteEnBaseDeDatos(this.username) == true){
+                
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Este nombre de usuario ya está en uso.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);    
+            
+         }else{
+            
             UsuarioDAO dao = new UsuarioDAO();
             
             dao.Insert(this.user);
@@ -56,7 +67,36 @@ public class RegistroController {
         
     }
     
+
+public boolean comprobarNombreUsuarioExistenteEnBaseDeDatos(String nombre){
     
+    UsuarioDAO uDao = new UsuarioDAO();
+    
+    for (Usuario u : (List<Usuario>)uDao.GetList()) {
+        if (u.getNombre().equals(nombre)) {
+            return true;
+        }
+    }
+    
+    return false;
+    
+    
+}    
+    
+public boolean comprobarCorreoExistenteEnBaseDeDatos(String correo){
+
+    UsuarioDAO uDao = new UsuarioDAO();
+    
+    for (Usuario u : (List<Usuario>)uDao.GetList()) {
+        if (u.getCorreo().equals(correo)) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+
     
 //        public String registrar(){
 //     
