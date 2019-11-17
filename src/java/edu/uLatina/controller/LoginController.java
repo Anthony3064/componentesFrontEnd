@@ -56,17 +56,16 @@ public class LoginController {
 
     public void login(){
         
-        UsuarioController uc = new UsuarioController();
+           UsuarioDAO ud = new UsuarioDAO();
         //Busca si el username y password esta en la database
-        for (Object obj : uc.Get()) {
-            if (((Usuario)obj).getNombre().equals(username) && ((Usuario)obj).getConstrania().equals(password)) { 
-                user = ((Usuario)obj);
+        if ((((Usuario)ud.getUsuario(1,user)).getNombre().equals(username)) && (((Usuario)ud.getUsuario(1,user)).getConstrania().equals(password))) { 
+                user = (Usuario)ud.getUsuario(1,user);
                 this.redireccionALandingPage(user); //si es valido el user lo manda a meterse al landing page
             }else{ //en caso de login fallido, usuario invalido, etc...
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario o contraseña incorrecta.");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
-            }
-        }  
+                    
+        }
     }
     
      public void redireccionALandingPage(Usuario u){
