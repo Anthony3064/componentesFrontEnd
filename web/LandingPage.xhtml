@@ -5,12 +5,89 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>Principal</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>Work in progress</div>
-    </body>
-</html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>LandingPage</title>
+    </h:head>
+    <style>
+        body { 
+            background-color: #ccccff;
+        }
+    </style>
+    <style type="text/css">
+        body .ui-staticmessage.ui-message {
+            width: 100%;
+        }
+    </style>
+    <style type="text/css">
+        .ui-outputlabel {
+            font-weight: bold;
+        }
+
+        .ui-orderlist .ui-orderlist-list {
+            height: auto;
+        }
+    </style>  
+
+    <h:body>
+
+
+        <h:form>
+            <p:growl id="messages" showDetail="true" life="2000" />
+            <p:menubar>
+
+                <p:menuitem value="Registrar" actionListener="#{loginController.redireccionARegistro()}" style=" border: solid gray 2px; border-radius: 5px; color: white; background-color: #232323; margin: 0 3px;" />
+
+                <f:facet name="bienvenido">
+                    <h:outputText value="Bienvenido #{dataTableController.usuario.username}" />
+                </f:facet>
+
+            </p:menubar>    
+
+        </h:form>
+        <h:form>
+            <p:carousel styleClass="carousel" value="#{algunController.listaFormularios}" circular="true" autoPlayInterval="5000" effect="fade" effectDuration="3000" headerText="Tus formularios" var="pforms" itemStyle="text-align:center" responsive="true" style="margin-top:0;border: solid gray 2px; border-radius: 5px;">
+                <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
+                    <f:facet name="header">
+                        <img src="Images/form.png" width="20" height="20"/>
+                    </f:facet>
+
+                    <h:outputText value="Formulario:" />
+                    <h:outputText value="#{Form.nombreForm}" />
+
+                    <h:outputText value="Link:" />
+                    <p:commandLink value="Ver formulario" actionListener="#{algunController.llevarapaginadeformularios()}"/>
+
+                    <f:facet name="footer">
+
+                    </f:facet>
+
+                </p:panelGrid>
+            </p:carousel>
+        </h:form>
+        <h:form>
+            <p:carousel styleClass="carousel" value="#{algunController.listaFormularios}" circular="true" autoPlayInterval="5000" effect="fade" effectDuration="3000" headerText="Formularios recientes" var="forms" itemStyle="text-align:center" responsive="true" style="margin-top:0;border: solid gray 2px; border-radius: 5px;">
+                <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
+                    <f:facet name="header">
+                        <img src="https://salesquest.website/Images/form.png" width="150" height="150" alt="form"></img>
+                    </f:facet>
+
+                    <h:outputText value="Formulario:" />
+                    <h:outputText value="#{Form.nombreForm}" />
+
+                    <h:outputText value="Link:" />
+                    <p:commandLink value="Ver formulario" actionListener="#{algunController.llevarapaginadeformularios()}"/>
+
+                    <f:facet name="footer">
+
+                    </f:facet>
+
+                </p:panelGrid>
+            </p:carousel>
+        </h:form> 
+    </h:body>
+</html> 

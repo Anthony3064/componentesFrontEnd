@@ -1,37 +1,44 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.uLatina.controller;
 
+import com.componentes.entidades.EItem;
+import com.componentes.entidades.Formulario;
+import com.componentes.entidades.Item;
+import com.componentes.entidades.Seccion;
+import com.componentes.logica.UsuarioLog;
 import edu.uLatina.model.OpcionTexto;
 import edu.uLatina.model.SeleccionMultiple;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
  * @author Personal
  */
 @ManagedBean(name = "dataTableController")
-@SessionScoped 
+@SessionScoped
 public class ControladorTableDate {
-    
+
+    @ManagedProperty("#{loginController}")
+    private LoginController usuario;
+
     @ManagedProperty("#{ControllerFormulario}")
     private ControllerFormulario lista;
+    private String nombreFormulario;
     private String pregunta;
     private String respuesta;
     private String opcion1;
     private String opcion2;
     private String opcion3;
     private String opcion4;
-    private List<OpcionTexto> listaSeccionesTexto = new ArrayList<>(); 
+    private List<OpcionTexto> listaSeccionesTexto = new ArrayList<>();
     private List<SeleccionMultiple> listaSecciones = new ArrayList<>();
-    
+    private Formulario frm = null;
+
     public ControladorTableDate() {
 
     }
@@ -58,6 +65,14 @@ public class ControladorTableDate {
 
     public void setPregunta(String pregunta) {
         this.pregunta = pregunta;
+    }
+
+    public Formulario getFrm() {
+        return frm;
+    }
+
+    public void setFrm(Formulario frm) {
+        this.frm = frm;
     }
 
     public String getOpcion1() {
@@ -91,32 +106,40 @@ public class ControladorTableDate {
     public void setOpcion4(String opcion4) {
         this.opcion4 = opcion4;
     }
-    
-    public void llenarListaSeccion(){
-        
+
+    public String getNombreFormulario() {
+        return nombreFormulario;
+    }
+
+    public void setNombreFormulario(String nombreFormulario) {
+        this.nombreFormulario = nombreFormulario;
+    }
+
+    public void llenarListaSeccion() {
+
         SeleccionMultiple sm = new SeleccionMultiple();
-        
+
         sm.setPregunta(pregunta);
         sm.getRespuestas().add(opcion1);
         sm.getRespuestas().add(opcion2);
         sm.getRespuestas().add(opcion3);
         sm.getRespuestas().add(opcion4);
-        
+
         this.listaSecciones.add(sm);
         this.limpiar();
-        
+
     }
-    
-    public void llenarListaOpcionTexto(){
-    
+
+    public void llenarListaOpcionTexto() {
+
         OpcionTexto opcionTexto = new OpcionTexto();
-        
+
         opcionTexto.setPregunta(pregunta);
         opcionTexto.setRespuesta(respuesta);
-    
+
         this.listaSeccionesTexto.add(opcionTexto);
         this.limpiar();
-        
+
     }
 
     public List<OpcionTexto> getListaSeccionesTexto() {
@@ -134,20 +157,105 @@ public class ControladorTableDate {
     public void setRespuesta(String respuesta) {
         this.respuesta = respuesta;
     }
-    
-    
-    public void limpiar(){
-    
+
+    public LoginController getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(LoginController usuario) {
+        this.usuario = usuario;
+    }
+
+    public void limpiar() {
+
         this.pregunta = "";
         this.opcion1 = "";
         this.opcion2 = "";
         this.opcion3 = "";
         this.opcion4 = "";
         this.respuesta = "";
+
     }
-    
-    public void llenarLista(){
-        this.listaSecciones = this.lista.getListaSelecciones();    
+
+    public void llenarLista() {
+        this.listaSecciones = this.lista.getListaSelecciones();
     }
-    
+
+    public void guardarFormulario() {
+
+        List<Formulario> listaFormulario = new ArrayList<>();
+        List<Seccion> secciones = new ArrayList<>();
+
+        frm = new Formulario();
+        frm.setUsuarioPadre(usuario.getUser());
+        frm.setNombre(this.nombreFormulario);
+        frm.setFavorito(false);
+
+        if (!this.getListaSecciones().isEmpty()) {
+
+            for (SeleccionMultiple sM : this.getListaSecciones()) {
+
+                List<Item> items = new ArrayList<>();
+                Seccion sccn = new Seccion();
+                sccn.setFormularioPadre(frm);
+                sccn.setPregunta(sM.getPregunta());
+
+                for (String str : sM.getRespuestas()) {
+                    Item item = new Item();
+                    item.setSeccion(sccn);
+                    item.setDefaultName(str);
+                    item.setTipoDato(EItem.RadioButton);
+                    items.add(item);
+                }
+                sccn.SetItem(items);
+                secciones.add(sccn);
+            }
+
+        }
+
+        if (!this.getListaSeccionesTexto().isEmpty()) {
+
+            for (OpcionTexto oT : this.getListaSeccionesTexto()) {
+
+                List<Item> items = new ArrayList<>();
+                Seccion sccn = new Seccion();
+                sccn.setFormularioPadre(frm);
+                sccn.setPregunta(oT.getPregunta());
+
+                Item item = new Item();
+                item.setSeccion(sccn);
+                item.setDefaultName(oT.getRespuesta());
+                item.setTipoDato(EItem.TextBox);
+                items.add(item);
+
+                sccn.SetItem(items);
+                secciones.add(sccn);
+            }
+
+        }
+        frm.SetSecciones(secciones);
+
+        if (!frm.GetSecciones().isEmpty() && !frm.getNombre().equalsIgnoreCase("")) {
+            listaFormulario.add(frm);
+
+            UsuarioLog usLog = new UsuarioLog();
+
+            usLog.guardarFormularioUsuario(listaFormulario, this.usuario.getUser());
+
+            this.nombreFormulario = "";
+
+            this.listaSecciones.clear();
+            this.listaSeccionesTexto.clear();
+
+            this.limpiar();
+
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Se guardó con éxito.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Por favor llene la pregunta o las secciones.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+
+    }
+
 }

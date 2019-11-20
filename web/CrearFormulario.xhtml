@@ -25,16 +25,19 @@ and open the template in the editor.
 
             <h:form id="formularios" style="width: 100%; border: black solid 2px;margin: 0 auto;" >
 
+                <p:growl id="msg" showDetail="true" sticky="true">
+                    
+                </p:growl>    
                 <p:panelGrid style="width: 100%; margin: 0 auto;" columns="1">
 
                     <p:outputLabel value="Ingrese el nombre del formulario" style="margin: 5px 5px; font-size: 40px;"/>
 
-                    <p:inputText placeholder="Nombre del formulario" style=" width: 90%;"/>
+                    <p:inputText placeholder="Nombre del formulario" value="#{dataTableController.nombreFormulario}" style=" width: 90%;"/>
 
                 </p:panelGrid>
 
 
-                <p:dataTable var="seccion" value="#{dataTableController.listaSecciones}" rendered="#{dataTableController.listaSecciones.size() > 0 eq true}" style="margin: 20px auto;" >
+                <p:dataTable id="tableSelect" var="seccion" value="#{dataTableController.listaSecciones}" rendered="#{dataTableController.listaSecciones.size() > 0 eq true}" style="margin: 20px auto;" >
                     <p:column headerText="Preguntas">
                         <p:panelGrid columns="1" style="margin: 10px ;">
                             <p:outputLabel value="#{seccion.pregunta}" />
@@ -49,8 +52,9 @@ and open the template in the editor.
                         </p:panelGrid>
                     </p:column>
                 </p:dataTable>
-                <p:remoteCommand actionListener="#{dataTableController.llenarListaSeccion()}" name="rc" update="@form"/>
-                <p:dataTable var="seccion" value="#{dataTableController.listaSeccionesTexto}" rendered="#{dataTableController.listaSeccionesTexto.size() > 0 eq true}" style="margin: 20px auto;">
+                <p:remoteCommand actionListener="#{dataTableController.llenarListaSeccion()}" name="rc" update="tableSelect"/>
+
+                <p:dataTable id="tableText" var="seccion" value="#{dataTableController.listaSeccionesTexto}" rendered="#{dataTableController.listaSeccionesTexto.size() > 0 eq true}" style="margin: 20px auto;">
 
                     <p:column >
 
@@ -61,11 +65,11 @@ and open the template in the editor.
 
                     </p:column>
                 </p:dataTable>
-                <p:remoteCommand name="rc2" actionListener="#{dataTableController.llenarListaOpcionTexto()}" update="@form"/>
-                
-                <h:panelGrid columns="3" style="align-content: center; justify-content: center; display: flex; width: 100%">
-                    <p:commandButton value="+" action="#{controllerFormulario.seleccionFormulario()}" update="@form" />
-                    <p:commandButton value="-" action="#{controllerFormulario.esconder()}" update="@form" />
+                <p:remoteCommand name="rc2" actionListener="#{dataTableController.llenarListaOpcionTexto()}" update="tableText"/>
+
+                <h:panelGrid id="panelGrid1" columns="3" style="align-content: center; justify-content: center; display: flex; width: 100%">
+                    <p:commandButton value="+" action="#{controllerFormulario.seleccionFormulario()}" update="formularios" />
+                    <p:commandButton value="-" action="#{controllerFormulario.esconder()}" update="formularios" />
                     <br/>
                     <p:outputLabel for="@next" value="Tipo de Pregunta:" />
 
@@ -77,16 +81,17 @@ and open the template in the editor.
 
                 </h:panelGrid>
 
-                <h:form style="width: 50%; border: black solid 2px;margin: 10px auto;" rendered="#{controllerFormulario.textoRendered}">
+                <h:form id="formularioPreguntaText" style="width: 50%; border: black solid 2px;margin: 10px auto;" rendered="#{controllerFormulario.textoRendered}">
+
                     <p:panelGrid style="width: 100%; margin: 10px auto;" columns="1">
                         <p:inputText placeholder="Pregunta:" value="#{dataTableController.pregunta}" style=" width: 90%;"/>
                         <p:inputTextarea placeholder="Respuesta:" value="#{dataTableController.opcion1}" rows="6" cols="33" style=" width: 90%;" />
-                        <p:commandButton value="Agregar" onclick="rc2()" update="@form"/>
-                    </p:panelGrid>
 
+                    </p:panelGrid>
+                    <p:commandButton style="margin: 20px auto" value="Agregar" onclick="rc2()" update=":formularios" />
                 </h:form> 
 
-                <h:form style="width: 50%; border: black solid 2px;margin: 10px auto;" rendered="#{controllerFormulario.seleccionMultipleRendered}">
+                <h:form id="formularioSelectOne" style="width: 50%; border: black solid 2px;margin: 10px auto;" rendered="#{controllerFormulario.seleccionMultipleRendered}">
                     <p:panelGrid style="width: 100%; margin: 10px auto;" columns="1">
                         <p:inputText placeholder="Pregunta:" value="#{dataTableController.pregunta}" style=" width: 90%;"/>
                     </p:panelGrid>
@@ -95,13 +100,25 @@ and open the template in the editor.
                         <p:inputText placeholder="Opcion 2:" value="#{dataTableController.opcion2}" />
                         <p:inputText placeholder="Opcion 3:" value="#{dataTableController.opcion3}" />
                         <p:inputText placeholder="Opcion 4:" value="#{dataTableController.opcion4}" />
+
                     </p:panelGrid>
-                    <p:commandButton value="Agregar" onclick="rc()" update="@form"/>
+                    <p:commandButton style="margin: 20px auto" value="Agregar" onclick="rc()" update=":formularios"/>
                 </h:form>
 
             </h:form>
 
+
+            <h:form style="width: 100%; border: black solid 2px;margin: 10px auto;">
+
+                <p:panelGrid columns="1" style="margin: 20px auto;">
+                    <p:commandButton value="Confirmar" actionListener="#{dataTableController.guardarFormulario()}" update=":formularios" />
+                </p:panelGrid>
+
+            </h:form>
+
         </p:panel>
+
+
 
     </h:body>
 </html>

@@ -1,9 +1,11 @@
-
 package edu.uLatina.controller;
+
 import com.componentes.entidades.Usuario;
 import com.componentes.dao.UsuarioDAO;
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -14,9 +16,10 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author Kainthel
  */
-@ManagedBean (name = "registroController")
+@ManagedBean(name = "registroController")
 @SessionScoped
 public class RegistroController {
+
     private String email;
     private String username;
     private String password;
@@ -24,80 +27,79 @@ public class RegistroController {
 
     public RegistroController() {
     }
-    
-    public void realizarRegistro(){
-    
+
+    public void realizarRegistro() {
+
         this.user = new Usuario();
-        
+
         this.user.setCorreo(this.email);
         this.user.setConstrania(this.password);
         this.user.setNombre(this.username);
-        
+
         if (this.username.equalsIgnoreCase("") || this.email.equalsIgnoreCase("") || this.password.equalsIgnoreCase("")) {
-                
+
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Se debe llenar todos los campos.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-       
-        }else if(this.comprobarCorreoExistenteEnBaseDeDatos(this.email) == true){
-        
+
+        } else if (this.comprobarCorreoExistenteEnBaseDeDatos(this.email) == true) {
+
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Este correo ya está en uso.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            
-        }else if(this.comprobarNombreUsuarioExistenteEnBaseDeDatos(this.username) == true){
-                
+
+        } else if (this.comprobarNombreUsuarioExistenteEnBaseDeDatos(this.username) == true) {
+
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Este nombre de usuario ya está en uso.");
-            FacesContext.getCurrentInstance().addMessage(null, msg);    
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else if (!this.comprobarCorreoValido(email)){
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Este correo no es valido.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);  
             
-         }else{
-            
+        } else {
+
             UsuarioDAO dao = new UsuarioDAO();
-            
+
             dao.Insert(this.user);
-            
+
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Correcto");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-          
+
             this.email = "";
             this.username = "";
             this.password = "";
             this.user = null;
-              
+
             this.redireccionALogin();
         }
-        
-    }
-    
 
-public boolean comprobarNombreUsuarioExistenteEnBaseDeDatos(String nombre){
-    
-    UsuarioDAO uDao = new UsuarioDAO();
-    
-    for (Usuario u : (List<Usuario>)uDao.GetList()) {
-        if (u.getNombre().equals(nombre)) {
-            return true;
+    }
+
+    public boolean comprobarNombreUsuarioExistenteEnBaseDeDatos(String nombre) {
+
+        UsuarioDAO uDao = new UsuarioDAO();
+
+        for (Usuario u : (List<Usuario>) uDao.GetList()) {
+            if (u.getNombre().equals(nombre)) {
+                return true;
+            }
         }
-    }
-    
-    return false;
-    
-    
-}    
-    
-public boolean comprobarCorreoExistenteEnBaseDeDatos(String correo){
 
-    UsuarioDAO uDao = new UsuarioDAO();
-    
-    for (Usuario u : (List<Usuario>)uDao.GetList()) {
-        if (u.getCorreo().equals(correo)) {
-            return true;
+        return false;
+
+    }
+
+    public boolean comprobarCorreoExistenteEnBaseDeDatos(String correo) {
+
+        UsuarioDAO uDao = new UsuarioDAO();
+
+        for (Usuario u : (List<Usuario>) uDao.GetList()) {
+            if (u.getCorreo().equals(correo)) {
+                return true;
+            }
         }
+
+        return false;
     }
-    
-    return false;
-}
 
-
-    
 //        public String registrar(){
 //     
 //        String redirect = "";
@@ -202,7 +204,6 @@ public boolean comprobarCorreoExistenteEnBaseDeDatos(String correo){
 //        return comprob;
 //    }
 //     
-
     public String getEmail() {
         return email;
     }
@@ -234,10 +235,10 @@ public boolean comprobarCorreoExistenteEnBaseDeDatos(String correo){
     public void setUser(Usuario user) {
         this.user = user;
     }
-    
-     public void redireccionALogin(){
-                    try {
-           
+
+    public void redireccionALogin() {
+        try {
+
             HttpServletRequest request = (HttpServletRequest) FacesContext
                     .getCurrentInstance().getExternalContext().getRequest();
             FacesContext
@@ -245,10 +246,26 @@ public boolean comprobarCorreoExistenteEnBaseDeDatos(String correo){
                     .getExternalContext()
                     .redirect(
                             request.getContextPath()
-                            + "/faces/Login.xhtml?faces-redirect=true"); 
-            }
-                    catch (IOException e) {
-                    }
-           
-     }     
+                            + "/faces/Login.xhtml?faces-redirect=true");
+        } catch (IOException e) {
+        }
+
+    }
+
+    public boolean comprobarCorreoValido(String email) {
+
+        boolean comprobar = false;
+
+        // Patrón para validar el email
+        Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@" + "(([a-z]+)\\.([a-z]+))+");
+
+        // El email a validar
+        Matcher matcher = pattern.matcher(email);
+
+        if (matcher.find() == true) {
+            comprobar = true;
+        }
+        return comprobar;
+    }
 }
+
