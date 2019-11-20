@@ -36,18 +36,20 @@ and open the template in the editor.
     <h:body>
 
 
-        <h:form>
+        <h:form style="border: solid black 2px; border-radius: 5px;">
             <p:growl id="messages" showDetail="true" life="2000" />
-            <p:menubar>
-
-                <p:menuitem value="Registrar" actionListener="#{loginController.redireccionARegistro()}" style=" border: solid gray 2px; border-radius: 5px; color: white; background-color: #232323; margin: 0 3px;" />
-
-                <f:facet name="bienvenido">
-                    <h:outputText value="Bienvenido #{dataTableController.usuario.username}" />
-                </f:facet>
-
+            <p:menubar style="display: flex; align-content: space-between; justify-content: center; align-content: space-between">
+                
+                <p:menuitem disabled="true" style="color: black; margin: 0 auto;" >
+                    <p:outputLabel value="Bienvenido #{dataTableController.usuario.username.toString()}" />
+                </p:menuitem>
+                <p:menuitem value="Cerrar sesión" actionListener="#{loginController.redireccionARegistro()}" style=" border: solid gray 2px; border-radius: 5px; color: white; background-color: #232323; margin: 0 3px;" />
+                
             </p:menubar>    
-
+            
+        </h:form>
+        <h:form>
+            <p:commandButton value="Crear formulario" actionListener="#{controllerFormulario.redireccionACrearFormulario()}" />
         </h:form>
         <h:form>
             <p:carousel styleClass="carousel" value="#{algunController.listaFormularios}" circular="true" autoPlayInterval="5000" effect="fade" effectDuration="3000" headerText="Tus formularios" var="pforms" itemStyle="text-align:center" responsive="true" style="margin-top:0;border: solid gray 2px; border-radius: 5px;">

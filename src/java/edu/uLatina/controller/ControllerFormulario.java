@@ -5,11 +5,14 @@
  */
 package edu.uLatina.controller;
 
+import com.componentes.entidades.Usuario;
 import edu.uLatina.model.SeleccionMultiple;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -213,5 +216,22 @@ public class ControllerFormulario {
         
     }
 
+    public void redireccionACrearFormulario(){
+                    try {
+           
+            HttpServletRequest request = (HttpServletRequest) FacesContext
+                    .getCurrentInstance().getExternalContext().getRequest();
+            FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .redirect(
+                            request.getContextPath()
+                            + "/faces/CrearFormulario.xhtml?faces-redirect=true");  //Aqui deberia ir a la Landing Page pero pues aun no existe
+            }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+           
+     }
     
 }
