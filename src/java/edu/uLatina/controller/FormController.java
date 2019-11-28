@@ -59,6 +59,7 @@ public class FormController {
         try {
 
        if(id != 0){
+           this.retrieveForm(id);
                 HttpServletRequest request = (HttpServletRequest) FacesContext
                     .getCurrentInstance().getExternalContext().getRequest();
             FacesContext
@@ -67,7 +68,7 @@ public class FormController {
                     .redirect(
                             request.getContextPath()
                             + "/faces/ResponderFormulario.xhtml?faces-redirect=true"); 
-            this.retrieveForm(id);
+            
 
             
        }
