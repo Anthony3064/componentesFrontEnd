@@ -88,6 +88,7 @@ public class FormController {
           ss.SetItem(ids.itemsEnSecciones(ss));
         }
         form.SetSecciones(secciones);
+        form.SetSecciones(secciones);
         
     }
 
