@@ -6,8 +6,12 @@
 
 package edu.uLatina.controller;
 
+import com.componentes.dao.FormularioDAO;
 import com.componentes.dao.UsuarioDAO;
+import com.componentes.entidades.Formulario;
 import com.componentes.entidades.Usuario;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -30,7 +34,8 @@ public class LoginController {
     Map<String, String> params =FacesContext.getCurrentInstance().
                    getExternalContext().getRequestParameterMap();
     private String formId;
-
+    private List<Formulario> listaFormularios = new ArrayList<>();
+    
     public LoginController() {
     }
 
@@ -65,9 +70,15 @@ public class LoginController {
     public void setUser(Usuario user) {
         this.user = user;
     }
-    
-    
 
+    public List<Formulario> getListaFormularios() {
+        return listaFormularios;
+    }
+
+    public void setListaFormularios(List<Formulario> listaFormularios) {
+        this.listaFormularios = listaFormularios;
+    }
+    
     public void login(){
         
         
@@ -102,7 +113,7 @@ public class LoginController {
     
      public void redireccionALandingPage(Usuario u){
                     try {
-           
+           this.cargarListaFormularios();
             HttpServletRequest request = (HttpServletRequest) FacesContext
                     .getCurrentInstance().getExternalContext().getRequest();
             FacesContext
@@ -135,5 +146,15 @@ public class LoginController {
                     }
            
      }     
+  
+     public void cargarListaFormularios(){
     
+        FormularioDAO fD = new FormularioDAO();
+        
+        for (Formulario f : fD.buscarFormulariosUsuario(this.getUser())) {
+            this.listaFormularios.add(f);
+        }
+    
+    }
+     
 }

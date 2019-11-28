@@ -12,6 +12,7 @@ and open the template in the editor.
 
     <h:head>
         <title>LandingPage</title>
+        
     </h:head>
     <style>
         body { 
@@ -38,31 +39,31 @@ and open the template in the editor.
 
         <h:form style="border: solid black 2px; border-radius: 5px;">
             <p:growl id="messages" showDetail="true" life="2000" />
-            <p:menubar style="display: flex; align-content: space-between; justify-content: center; align-content: space-between">
+            <p:menubar style="display: flex; align-content: space-between; justify-content: space-between; align-content: space-between;">
                 
-                <p:menuitem disabled="true" style="color: black; margin: 0 auto;" >
-                    <p:outputLabel value="Bienvenido #{dataTableController.usuario.username.toString()}" />
+                <p:menuitem disabled="true" style=" color: black; margin: 0 auto;" >
+                    <p:outputLabel style="width: 100%;" value="Bienvenido #{dataTableController.usuario.username.toString()}" />
                 </p:menuitem>
                 <p:menuitem value="Cerrar sesión" actionListener="#{loginController.redireccionARegistro()}" style=" border: solid gray 2px; border-radius: 5px; color: white; background-color: #232323; margin: 0 3px;" />
                 
             </p:menubar>    
             
         </h:form>
-        <h:form>
-            <p:commandButton value="Crear formulario" actionListener="#{controllerFormulario.redireccionACrearFormulario()}" />
+        <h:form style=" margin: 2px 0; width: 100%; text-align: center; border: solid black 1px; border-radius: 3px; background: blueviolet">
+            <p:commandButton style=" margin: 5px;" value="Crear formulario" actionListener="#{controllerFormulario.redireccionACrearFormulario()}" />
         </h:form>
         <h:form>
-            <p:carousel styleClass="carousel" value="#{algunController.listaFormularios}" circular="true" autoPlayInterval="5000" effect="fade" effectDuration="3000" headerText="Tus formularios" var="pforms" itemStyle="text-align:center" responsive="true" style="margin-top:0;border: solid gray 2px; border-radius: 5px;">
+            <p:carousel styleClass="carousel" var="form" value="#{loginController.listaFormularios}" circular="true" autoPlayInterval="5000" effect="fade" effectDuration="3000" headerText="Tus formularios" itemStyle="text-align:center" responsive="true" style="margin-top:0;border: solid gray 2px; border-radius: 5px;">
                 <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
                     <f:facet name="header">
-                        <img src="Images/form.png" width="20" height="20"/>
+                        <p:graphicImage name="images/form.png" library="presentacion" width="100" height="100" />
                     </f:facet>
 
                     <h:outputText value="Formulario:" />
-                    <h:outputText value="#{Form.nombreForm}" />
+                    <h:outputText value="#{form.nombre}" />
 
                     <h:outputText value="Link:" />
-                    <p:commandLink value="Ver formulario" actionListener="#{algunController.llevarapaginadeformularios()}"/>
+                    <p:commandLink value="Ver formulario" />
 
                     <f:facet name="footer">
 
@@ -72,17 +73,17 @@ and open the template in the editor.
             </p:carousel>
         </h:form>
         <h:form>
-            <p:carousel styleClass="carousel" value="#{algunController.listaFormularios}" circular="true" autoPlayInterval="5000" effect="fade" effectDuration="3000" headerText="Formularios recientes" var="forms" itemStyle="text-align:center" responsive="true" style="margin-top:0;border: solid gray 2px; border-radius: 5px;">
+            <p:carousel styleClass="carousel" value="#{loginController.listaFormularios}" var="form" circular="true" autoPlayInterval="5000" effect="fade" effectDuration="3000" headerText="Formularios recientes" itemStyle="text-align:center" responsive="true" style="margin-top:0;border: solid gray 2px; border-radius: 5px;">
                 <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
                     <f:facet name="header">
-                        <img src="https://salesquest.website/Images/form.png" width="150" height="150" alt="form"></img>
+                        <p:graphicImage name="images/form.png" library="presentacion" width="100" height="100" />
                     </f:facet>
 
                     <h:outputText value="Formulario:" />
-                    <h:outputText value="#{Form.nombreForm}" />
+                    <h:outputText value="#{form.nombre}" />
 
                     <h:outputText value="Link:" />
-                    <p:commandLink value="Ver formulario" actionListener="#{algunController.llevarapaginadeformularios()}"/>
+                    <p:commandLink value="Ver formulario" />
 
                     <f:facet name="footer">
 
