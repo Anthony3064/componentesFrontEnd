@@ -8,6 +8,7 @@ package edu.uLatina.controller;
 
 import com.componentes.dao.UsuarioDAO;
 import com.componentes.entidades.Usuario;
+import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -26,8 +27,19 @@ public class LoginController {
     private String username; //Estos se consiguen directamente del login page ("index.html")
     private String password;
     private Usuario user = null;
+    Map<String, String> params =FacesContext.getCurrentInstance().
+                   getExternalContext().getRequestParameterMap();
+    private String formId;
 
     public LoginController() {
+    }
+
+    public String getFormId() {
+        return formId;
+    }
+
+    public void setFormId(String formId) {
+        this.formId = formId;
     }
 
     public String getUsername() {
