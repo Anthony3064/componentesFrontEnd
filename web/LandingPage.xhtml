@@ -39,12 +39,6 @@ and open the template in the editor.
 
         <h:form style="border: solid black 2px; border-radius: 5px;">
 
-            <p:dialog header="Compartir" widgetVar="compartir" modal="true" height="100">
-                <h:form styleClass="linkCompartir" >
-                    <p:outputLabel value="#{formController.link}" />
-                </h:form>
-            </p:dialog>
-
             <p:growl id="messages" showDetail="true" life="2000" />
             <p:menubar style="display: flex; align-content: space-between; justify-content: space-between; align-content: space-between;">
 
@@ -70,12 +64,16 @@ and open the template in the editor.
                     <h:outputText value="#{form.nombre}" />
 
                     <h:outputText value="Link:" />
-                    <p:commandLink value="Ver formulario" onclick="PF('compartir').show();" actionListener="#{formController.linkCompartir(form.id)}" update="@(.linkCompartir)"/>
+                    <p:commandLink value="Ver formulario"  update="@(.linkCompartir)" actionListener="#{formController.linkCompartir(form.id)}" onclick="PF('compartir').show();"/>
 
                     <f:facet name="footer">
 
                     </f:facet>
-
+                    <p:dialog header="Compartir Formulario" widgetVar="compartir" modal="true" width="600" height="100">
+                        <h:form styleClass="linkCompartir">
+                            <p:inputText value="#{formController.link}" style=" width: 100%;"/>
+                        </h:form>
+                    </p:dialog>
                 </p:panelGrid>
             </p:carousel>
         </h:form>
