@@ -88,12 +88,16 @@ and open the template in the editor.
                     <h:outputText value="#{form.nombre}" />
 
                     <h:outputText value="Link:" />
-                    <p:commandLink value="Ver formulario" />
+                    <p:commandLink value="Ver formulario"  update="@(.linkCompartir)" actionListener="#{formController.linkCompartir(form.id)}" onclick="PF('compartir').show();"/>
 
                     <f:facet name="footer">
 
                     </f:facet>
-
+                    <p:dialog header="Compartir Formulario" widgetVar="compartir2" modal="true" width="600" height="100">
+                        <h:form styleClass="linkCompartir">
+                            <p:inputText value="#{formController.link}" style=" width: 100%;"/>
+                        </h:form>
+                    </p:dialog>
                 </p:panelGrid>
             </p:carousel>
         </h:form> 
