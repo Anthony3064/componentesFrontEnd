@@ -12,7 +12,7 @@ and open the template in the editor.
 
     <h:head>
         <title>LandingPage</title>
-        
+
     </h:head>
     <style>
         body { 
@@ -38,16 +38,23 @@ and open the template in the editor.
 
 
         <h:form style="border: solid black 2px; border-radius: 5px;">
+
+            <p:dialog header="Compartir" widgetVar="compartir" modal="true" height="100">
+                <h:form styleClass="linkCompartir" >
+                    <p:outputLabel value="#{formController.link}" />
+                </h:form>
+            </p:dialog>
+
             <p:growl id="messages" showDetail="true" life="2000" />
             <p:menubar style="display: flex; align-content: space-between; justify-content: space-between; align-content: space-between;">
-                
+
                 <p:menuitem disabled="true" style=" color: black; margin: 0 auto;" >
                     <p:outputLabel style="width: 100%;" value="Bienvenido #{dataTableController.usuario.username.toString()}" />
                 </p:menuitem>
-                <p:menuitem value="Cerrar sesión" actionListener="#{loginController.redireccionARegistro()}" style=" border: solid gray 2px; border-radius: 5px; color: white; background-color: #232323; margin: 0 3px;" />
-                
+                <p:menuitem value="Cerrar sesión" actionListener="#{loginController.cerrarSesion()}" style=" border: solid gray 2px; border-radius: 5px; color: white; background-color: #232323; margin: 0 3px;" />
+
             </p:menubar>    
-            
+
         </h:form>
         <h:form style=" margin: 2px 0; width: 100%; text-align: center; border: solid black 1px; border-radius: 3px; background: blueviolet">
             <p:commandButton style=" margin: 5px;" value="Crear formulario" actionListener="#{controllerFormulario.redireccionACrearFormulario()}" />
@@ -63,7 +70,7 @@ and open the template in the editor.
                     <h:outputText value="#{form.nombre}" />
 
                     <h:outputText value="Link:" />
-                    <p:commandLink value="Ver formulario" />
+                    <p:commandLink value="Ver formulario" onclick="PF('compartir').show();" actionListener="#{formController.linkCompartir(form.id)}" update="@(.linkCompartir)"/>
 
                     <f:facet name="footer">
 

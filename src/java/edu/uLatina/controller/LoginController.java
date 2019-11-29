@@ -113,6 +113,7 @@ public class LoginController {
     
      public void redireccionALandingPage(Usuario u){
                     try {
+           this.listaFormularios.clear();
            this.cargarListaFormularios();
             HttpServletRequest request = (HttpServletRequest) FacesContext
                     .getCurrentInstance().getExternalContext().getRequest();
@@ -156,5 +157,24 @@ public class LoginController {
         }
     
     }
+     
+     public void cerrarSesion(){
+         
+            try {
+           
+            HttpServletRequest request = (HttpServletRequest) FacesContext
+                    .getCurrentInstance().getExternalContext().getRequest();
+            FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .redirect(
+                            request.getContextPath()
+                            + "/faces/Login.xhtml?faces-redirect=true"); 
+            }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+           
+     }
      
 }

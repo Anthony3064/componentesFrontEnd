@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 public class FormController {
 
     private List<Seccion> listaSecciones = new ArrayList<>();
-    
+    private String link = "";
     public Usuario getU() {
         return u;
     }
@@ -55,6 +55,16 @@ public class FormController {
         this.listaSeccionSeleccionMultiple = listaSeccionSeleccionMultiple;
     }
 
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    
+    
     public List<OpcionTexto> getListaSeccionOpcionTexto() {
         return listaSeccionOpcionTexto;
     }
@@ -63,8 +73,6 @@ public class FormController {
         this.listaSeccionOpcionTexto = listaSeccionOpcionTexto;
     }
     
-    
-
     public FormController() {
 
     }
@@ -110,13 +118,21 @@ public class FormController {
                             request.getContextPath()
                             + "/faces/ResponderFormulario.xhtml?faces-redirect=true"); 
             
-
-            
        }
             
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+   
+    public void linkCompartir(int id){
+     
+        
+        String link = "http://localhost:8080/CreadorDeFormularios" + "/?id=" + String.valueOf(id) + "";  
+     
+        this.link = link;
+        
     }
     
     public void retrieveForm(int id){
