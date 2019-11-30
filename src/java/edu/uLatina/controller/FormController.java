@@ -108,6 +108,7 @@ public class FormController {
        if(id != 0){
            this.listaSeccionOpcionTexto.clear();
            this.listaSeccionSeleccionMultiple.clear();
+           
            this.retrieveForm(id);
                 HttpServletRequest request = (HttpServletRequest) FacesContext
                     .getCurrentInstance().getExternalContext().getRequest();

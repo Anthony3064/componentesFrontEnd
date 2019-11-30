@@ -78,7 +78,7 @@ and open the template in the editor.
             </p:carousel>
         </h:form>
         <h:form>
-            <p:carousel styleClass="carousel" value="#{loginController.listaFormularios}" var="form" circular="true" autoPlayInterval="5000" effect="fade" effectDuration="3000" headerText="Formularios recientes" itemStyle="text-align:center" responsive="true" style="margin-top:0;border: solid gray 2px; border-radius: 5px;">
+            <p:carousel styleClass="carousel" value="#{loginController.listaFormulariosTodos}" var="form" circular="true" autoPlayInterval="5000" effect="fade" effectDuration="3000" headerText="Formularios recientes" itemStyle="text-align:center" responsive="true" style="margin-top:0;border: solid gray 2px; border-radius: 5px;">
                 <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
                     <f:facet name="header">
                         <p:graphicImage name="images/form.png" library="presentacion" width="100" height="100" />

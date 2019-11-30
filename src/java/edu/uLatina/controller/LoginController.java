@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package edu.uLatina.controller;
 
 import com.componentes.dao.FormularioDAO;
@@ -23,19 +22,20 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author Kainthel
  */
-@ManagedBean (name = "loginController")
+@ManagedBean(name = "loginController")
 @SessionScoped
 public class LoginController {
-    
+
     //Parametros para el usuario
     private String username; //Estos se consiguen directamente del login page ("index.html")
     private String password;
     private Usuario user = null;
-    Map<String, String> params =FacesContext.getCurrentInstance().
-                   getExternalContext().getRequestParameterMap();
+    Map<String, String> params = FacesContext.getCurrentInstance().
+            getExternalContext().getRequestParameterMap();
     private String formId;
     private List<Formulario> listaFormularios = new ArrayList<>();
-    
+    private List<Formulario> listaFormulariosTodos = new ArrayList<>();
+
     public LoginController() {
     }
 
@@ -45,6 +45,14 @@ public class LoginController {
 
     public void setFormId(String formId) {
         this.formId = formId;
+    }
+
+    public List<Formulario> getListaFormulariosTodos() {
+        return listaFormulariosTodos;
+    }
+
+    public void setListaFormulariosTodos(List<Formulario> listaFormulariosTodos) {
+        this.listaFormulariosTodos = listaFormulariosTodos;
     }
 
     public String getUsername() {
@@ -78,43 +86,43 @@ public class LoginController {
     public void setListaFormularios(List<Formulario> listaFormularios) {
         this.listaFormularios = listaFormularios;
     }
-    
-    public void login(){
-        
-        
+
+    public void login() {
+
         if (this.username.equalsIgnoreCase("") || this.password.equalsIgnoreCase("")) {
-            
+
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe llenar todos los campos.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            
-        }else{
-         
-        UsuarioDAO uDao = new UsuarioDAO();
-        
-        //Busca si el username y password esta en la database
-                
-        this.user = (Usuario)uDao.login(this.username, this.password);
-                
-        if (user != null){
-                    
-            this.redireccionALandingPage(user); //si es valido el user lo manda a meterse al landing page
-            
-        }else{
-            //en caso de login fallido, usuario invalido, etc...
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario o contraseña incorrecta.");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            this.password = "";
-            this.username = "";
-            this.user = null;
+
+        } else {
+
+            UsuarioDAO uDao = new UsuarioDAO();
+
+            //Busca si el username y password esta en la database
+            this.user = (Usuario) uDao.login(this.username, this.password);
+
+            if (user != null) {
+
+                this.redireccionALandingPage(user); //si es valido el user lo manda a meterse al landing page
+
+            } else {
+                //en caso de login fallido, usuario invalido, etc...
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario o contraseña incorrecta.");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+                this.password = "";
+                this.username = "";
+                this.user = null;
+            }
         }
-      }
-        
+
     }
-    
-     public void redireccionALandingPage(Usuario u){
-                    try {
-           this.listaFormularios.clear();
-           this.cargarListaFormularios();
+
+    public void redireccionALandingPage(Usuario u) {
+        try {
+            this.listaFormularios.clear();
+            this.listaFormulariosTodos.clear();
+            this.cargarListaFormulariosTodos();
+            this.cargarListaFormularios();
             HttpServletRequest request = (HttpServletRequest) FacesContext
                     .getCurrentInstance().getExternalContext().getRequest();
             FacesContext
@@ -123,16 +131,15 @@ public class LoginController {
                     .redirect(
                             request.getContextPath()
                             + "/faces/LandingPage.xhtml?faces-redirect=true");  //Aqui deberia ir a la Landing Page pero pues aun no existe
-            }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
-           
-     }
-     
-     public void redireccionARegistro(){
-                    try {
-           
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void redireccionARegistro() {
+        try {
+
             HttpServletRequest request = (HttpServletRequest) FacesContext
                     .getCurrentInstance().getExternalContext().getRequest();
             FacesContext
@@ -140,28 +147,37 @@ public class LoginController {
                     .getExternalContext()
                     .redirect(
                             request.getContextPath()
-                            + "/faces/Registro.xhtml?faces-redirect=true"); 
-            }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
-           
-     }     
-  
-     public void cargarListaFormularios(){
-    
+                            + "/faces/Registro.xhtml?faces-redirect=true");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void cargarListaFormulariosTodos() {
+
         FormularioDAO fD = new FormularioDAO();
-        
+
+        for (Formulario f : fD.GetList() ) {
+            this.listaFormulariosTodos.add(f);
+        }
+
+    }
+
+    public void cargarListaFormularios() {
+
+        FormularioDAO fD = new FormularioDAO();
+
         for (Formulario f : fD.buscarFormulariosUsuario(this.getUser())) {
             this.listaFormularios.add(f);
         }
-    
+
     }
-     
-     public void cerrarSesion(){
-         
-            try {
-           
+
+    public void cerrarSesion() {
+
+        try {
+
             HttpServletRequest request = (HttpServletRequest) FacesContext
                     .getCurrentInstance().getExternalContext().getRequest();
             FacesContext
@@ -169,12 +185,11 @@ public class LoginController {
                     .getExternalContext()
                     .redirect(
                             request.getContextPath()
-                            + "/faces/Login.xhtml?faces-redirect=true"); 
-            }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
-           
-     }
-     
+                            + "/faces/Login.xhtml?faces-redirect=true");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }

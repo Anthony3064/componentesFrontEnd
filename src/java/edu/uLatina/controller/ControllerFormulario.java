@@ -5,7 +5,6 @@
  */
 package edu.uLatina.controller;
 
-import com.componentes.entidades.Usuario;
 import edu.uLatina.model.SeleccionMultiple;
 import java.util.ArrayList;
 import java.util.List;
