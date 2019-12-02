@@ -10,22 +10,29 @@
             .mainForm {
                 margin: auto;
                 width: 30%;
-                padding: 150px 0;
-                padding-left: 100px;
+                padding: 150px 0px;
+                padding-left: 100px;                
             }
+            .Bimage{
+                background-image:url(#{request.contextPath}/resources/presentacion/images/660444.jpg);
+            }    
             body {
-                background-color: #4c00a4;
-                margin: 0 ;
+                margin: 0px ;
                 height: 100%;
-                width: 100%
+                width: 100%;   
             }
             .label {
                 margin: 2px;
-                color: white;
+                color: purple;
             }
             .inputText{
                 width: 80%;
             }
+            .round {
+                border: 5px solid gray;
+                border-radius: 8px;
+                background-color: white; 
+            }            
             .btn {
                 background-color: #4c00a4; 
                 border-style: solid;
@@ -37,29 +44,28 @@
                 border-radius:5px;
                 font-size: 20px;
                 color:white;
-            }
+            }        
         </style>
     </h:head>
-    <h:body onload="#{formController.validateId(param['id'])}">
+    <h:body class="Bimage" onload="#{formController.validateId(param['id'])}">
 
-        <h:form style="margin: 200px auto; width: 50%; align-items: center; text-align: left;">
-            
+        <h:form class="Bimage" style="margin: 200px auto; width: 50%; align-items: center; text-align: left; background-image:url(resources/presentacion/images/660456.jpg); ">
             <p:messages id="msg" showDetail="true" closable="true">
                 <p:autoUpdate />
             </p:messages>
-
-            <h1 style="font-weight: bold; width: 100%; color: white; text-align: center" >Ingreso al sistema</h1>
-            <br></br>
-            <h:outputText value="#{formController.formId}" />
-            <h:panelGrid columns="2" style="width: 50%; margin: 0 auto" cellpadding="5">
-                <p:outputLabel class="label" for="float-input" value="Usuario: " />
+            <h:panelGrid class="round" columns="2" style="width: 50%; margin: 30px auto" cellpadding="5">
+                <h1 style="font-weight: bold; width: 100%; color: purple;" >Ingreso al sistema</h1> 
+                <p:graphicImage name="images/logo_formulario_1.png" library="presentacion" width="100" height="150" />
+            </h:panelGrid>  
+            <h:panelGrid class="round" columns="2" style="width: 50%; margin: 0px auto" cellpadding="5">
+                <p:outputLabel style="margin-left: 25px" class="label" for="float-input" value="Usuario: " />
                 <p:inputText class="inputText" id="float-input" value="#{loginController.username}" />
-                <p:outputLabel class="label" for="float-input2" value="Contraseña: " />
+                <p:outputLabel style="margin-left: 25px" class="label" for="float-input2" value="Contraseña: " />
                 <p:password class="inputText" id="float-input2" value="#{loginController.password}" />
-                <h:panelGrid columns="1" style="margin: -20px auto;width: 100%; display: flex; justify-content:" cellpadding="2">
-                    <p:commandButton class="btn" style="margin: 20px 0 20px 0;" value="Ingresar" actionListener="#{loginController.login()}" update="@form"/>
+                <h:panelGrid columns="1" style="margin: -20px auto;width: 100%; display: flex;" cellpadding="2">
+                    <p:commandButton class="btn" style="margin: 20px 40px 20px 20px;" value="Ingresar" actionListener="#{loginController.login()}" update="@form"/>
                 </h:panelGrid>
-                <p:commandLink class="label" value="No tiene cuenta?" actionListener="#{loginController.redireccionARegistro()}"/>
+                <p:commandLink style="margin-left: 25px" class="label" value="No tiene cuenta?" actionListener="#{loginController.redireccionARegistro()}"/>
             </h:panelGrid>
         </h:form>
     </h:body>
