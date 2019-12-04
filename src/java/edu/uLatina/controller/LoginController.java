@@ -201,13 +201,6 @@ public class LoginController {
     }
 
     public void mandarCorreo() {
-        Properties p = new Properties();
-
-        p.put("mail.smtp.host", "smtp.gmail.com");
-        p.put("mail.smtp.starttls.enable", "true");
-        p.put("mail.smtp.port", "587");
-        p.put("mail.smtp.user", "parapropruebas@gmail.com");
-        p.put("mail.smtp.auth", "true");
 
         //Session session = Session.getDefaultInstance(p, null);
         //MimeMessage m = new MimeMessage(session);
@@ -232,8 +225,7 @@ public class LoginController {
          * } catch (MessagingException me) { me.printStackTrace(); FacesMessage
          * msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Informe", "El
          * correo se envio exitosamente..");
-         * FacesContext.getCurrentInstance().addMessage(null, msg);
-        }*
+         * FacesContext.getCurrentInstance().addMessage(null, msg); }*
          */
         FormController fc = new FormController();
         Properties props = new Properties();
@@ -254,18 +246,20 @@ public class LoginController {
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("DF@diarioFacil.com"));
+            message.setFrom(new InternetAddress("parapropruebas@gmail.com"));
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(user.getCorreo()));
+                    InternetAddress.parse("parapropruebas@gmail.com"));
             message.setSubject("Link del formulario");
             message.setText("Hola ,"
                     + "\n\n Este es el link del formulario que usted solicitó: " + fc.getLink());
 
             Transport.send(message);
             FacesMessage messages = new FacesMessage(FacesMessage.SEVERITY_INFO, "Informe", "El correo se envio exitosamente..");
-            FacesContext.getCurrentInstance().addMessage(null, messages);
+            FacesContext.getCurrentInstance().addMessage(null, messages); 
 
         } catch (MessagingException e) {
+            FacesMessage messages = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "El correo no se pudo enviar.");
+            FacesContext.getCurrentInstance().addMessage(null, messages);
             throw new RuntimeException(e);
 
         }

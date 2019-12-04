@@ -54,6 +54,7 @@ and open the template in the editor.
             <p:commandButton style=" margin: 5px;" value="Crear formulario" actionListener="#{controllerFormulario.redireccionACrearFormulario()}" />
         </h:form>
         <h:form>
+            <p:growl id="messages" showDetail="true" life="2000" />
             <p:carousel styleClass="carousel" var="form" value="#{loginController.listaFormularios}" circular="true" autoPlayInterval="5000" effect="fade" effectDuration="3000" headerText="Tus formularios" itemStyle="text-align:center" responsive="true" style="margin-top:0;border: solid gray 2px; border-radius: 5px;">
                 <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
                     <f:facet name="header">
@@ -67,7 +68,7 @@ and open the template in the editor.
                     <p:commandLink value="Ver formulario"  update="@(.linkCompartir)" actionListener="#{formController.linkCompartir(form.id)}" onclick="PF('compartir').show();"/>
 
                     <f:facet name="footer">
-                        <p:commandButton value="Enviar" onclick="#{loginController.mandarCorreo()}"/>
+                        <p:commandButton value="Enviar Correo" actionListener="#{loginController.mandarCorreo()}"/>
                     </f:facet>
                     <p:dialog header="Compartir Formulario" widgetVar="compartir" modal="true" width="600" height="100">
                         <h:form styleClass="linkCompartir">
@@ -78,6 +79,7 @@ and open the template in the editor.
             </p:carousel>
         </h:form>
         <h:form>
+            <p:growl id="messages" showDetail="true" life="2000" />
             <p:carousel styleClass="carousel" value="#{loginController.listaFormulariosTodos}" var="form" circular="true" autoPlayInterval="5000" effect="fade" effectDuration="3000" headerText="Formularios recientes" itemStyle="text-align:center" responsive="true" style="margin-top:0;border: solid gray 2px; border-radius: 5px;">
                 <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
                     <f:facet name="header">
