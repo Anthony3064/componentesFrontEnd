@@ -16,9 +16,18 @@ import edu.uLatina.model.OpcionTexto;
 import edu.uLatina.model.SeleccionMultiple;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -106,7 +115,7 @@ public class FormController {
             if (id != 0) {
                 this.listaSeccionOpcionTexto.clear();
                 this.listaSeccionSeleccionMultiple.clear();
-
+                
                 this.retrieveForm(id);
                 HttpServletRequest request = (HttpServletRequest) FacesContext
                         .getCurrentInstance().getExternalContext().getRequest();
@@ -124,12 +133,11 @@ public class FormController {
         }
     }
 
-    public void linkCompartir(int id) {
+    public String linkCompartir(int id) {
 
         String link = "http://localhost:8080/CreadorDeFormularios" + "/?id=" + String.valueOf(id) + "";
-
-        this.link = link;
-
+        
+       return link;
     }
 
     public void retrieveForm(int id) {
@@ -191,4 +199,69 @@ public class FormController {
         this.form = form;
     }
 
+    public void mandarCorreo(String link) {
+
+        //Session session = Session.getDefaultInstance(p, null);
+        //MimeMessage m = new MimeMessage(session);
+        /**
+         * try {
+         *
+         * m.setFrom(new InternetAddress("parapropruebas@gmail.com"));
+         *
+         * m.addRecipient(Message.RecipientType.TO, new
+         * InternetAddress(user.getCorreo())); m.setSubject("Link de
+         * formulario.");
+         *
+         *
+         *
+         * String mensaje = "El link del formulario que usted pidio es: " +
+         * fc.getLink(); m.setText(mensaje);
+         *
+         * Transport transport = session.getTransport("smtp");
+         * transport.connect("parapropruebas@gmail.com", "123456pruebas");
+         * transport.sendMessage(m, m.getAllRecipients()); transport.close();
+         *
+         * } catch (MessagingException me) { me.printStackTrace(); FacesMessage
+         * msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Informe", "El
+         * correo se envio exitosamente..");
+         * FacesContext.getCurrentInstance().addMessage(null, msg); }*
+         */
+        FormController fc = new FormController();
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class",
+                "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.port", "465");
+
+        Session session = Session.getDefaultInstance(props,
+                new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("parapropruebas@gmail.com", "123456pruebas");
+            }
+        });
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("parapropruebas@gmail.com"));
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse("parapropruebas@gmail.com"));
+            message.setSubject("Link del formulario");
+            message.setText("Hola ,"
+                    + "\n\n Este es el link del formulario que usted solicitó: " + link);
+
+            Transport.send(message);
+            FacesMessage messages = new FacesMessage(FacesMessage.SEVERITY_INFO, "Informe", "El correo se envio exitosamente..");
+            FacesContext.getCurrentInstance().addMessage(null, messages); 
+
+        } catch (MessagingException e) {
+            FacesMessage messages = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "El correo no se pudo enviar.");
+            FacesContext.getCurrentInstance().addMessage(null, messages);
+            throw new RuntimeException(e);
+
+        }
+    }
+    
 }

@@ -47,9 +47,9 @@
             }        
         </style>
     </h:head>
-    <h:body class="Bimage">
+    <h:body class="Bimage" onload="#{formController.validateId(param['id'])}">
 
-        <h:form class="Bimage" style="margin: 200px auto; width: 50%; align-items: center; text-align: left; background-image:url(resources/presentacion/images/660456.jpg); ">
+        <h:form class="Bimage" style="margin: 200px auto; width: 80%; align-items: center; text-align: left; background-image:url(resources/presentacion/images/660456.jpg); ">
             <p:messages id="msg" showDetail="true" closable="true">
                 <p:autoUpdate />
             </p:messages>

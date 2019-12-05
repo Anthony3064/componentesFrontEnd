@@ -34,7 +34,7 @@ and open the template in the editor.
         }
     </style>  
 
-    <h:body>
+    <h:body styleClass="todo">
 
 
         <h:form style="border: solid black 2px; border-radius: 5px;">
@@ -65,17 +65,16 @@ and open the template in the editor.
                     <h:outputText value="#{form.nombre}" />
 
                     <h:outputText value="Link:" />
-                    <p:commandLink value="Ver formulario"  update="@(.linkCompartir)" actionListener="#{formController.linkCompartir(form.id)}" onclick="PF('compartir').show();"/>
-
+                    <p:commandLink value="Ver formulario" actionListener="#{formController.validateId(form.id)}" />
+                    
                     <f:facet name="footer">
-                        <p:commandButton value="Enviar Correo" actionListener="#{loginController.mandarCorreo()}"/>
+                        
                     </f:facet>
-                    <p:dialog header="Compartir Formulario" widgetVar="compartir" modal="true" width="600" height="100">
-                        <h:form styleClass="linkCompartir">
-                            <p:inputText value="#{formController.link}" style=" width: 100%;"/>
-                        </h:form>
-                    </p:dialog>
+              
+                    <p:commandButton value="Enviar por correo" actionListener="#{formController.mandarCorreo(formController.linkCompartir(form.id))}" update="@('todo')" style=" width: 100%;"/>
+                    
                 </p:panelGrid>
+                
             </p:carousel>
         </h:form>
         <h:form>
@@ -90,16 +89,13 @@ and open the template in the editor.
                     <h:outputText value="#{form.nombre}" />
 
                     <h:outputText value="Link:" />
-                    <p:commandLink value="Ver formulario"  update="@(.linkCompartir)" actionListener="#{formController.linkCompartir(form.id)}" onclick="PF('compartir').show();"/>
+                    <p:commandLink value="Ver formulario" actionListener="#{formController.validateId(form.id)}" />
+                    
 
                     <f:facet name="footer">
 
                     </f:facet>
-                    <p:dialog header="Compartir Formulario" widgetVar="compartir2" modal="true" width="600" height="100">
-                        <h:form styleClass="linkCompartir">
-                            <p:inputText value="#{formController.link}" style=" width: 100%;"/>
-                        </h:form>
-                    </p:dialog>
+                    <p:commandButton value="Enviar por correo" actionListener="#{formController.mandarCorreo(formController.linkCompartir(form.id))}" update="@('todo')" style=" width: 100%;"/>
                 </p:panelGrid>
             </p:carousel>
         </h:form> 
