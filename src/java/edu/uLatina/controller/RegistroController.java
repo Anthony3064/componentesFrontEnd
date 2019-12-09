@@ -1,5 +1,6 @@
 package edu.uLatina.controller;
 
+import com.componentes.controlador.UsuarioController;
 import com.componentes.entidades.Usuario;
 import com.componentes.dao.UsuarioDAO;
 import java.io.IOException;
@@ -56,9 +57,9 @@ public class RegistroController {
             
         } else {
 
-            UsuarioDAO dao = new UsuarioDAO();
-
-            dao.Insert(this.user);
+            UsuarioController uC = new UsuarioController();
+            
+            uC.Insert(this.user);
 
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Correcto");
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -77,12 +78,13 @@ public class RegistroController {
 
         UsuarioDAO uDao = new UsuarioDAO();
 
+        /*
         for (Usuario u : (List<Usuario>) uDao.GetList()) {
             if (u.getNombre().equals(nombre)) {
                 return true;
             }
         }
-
+        */
         return false;
 
     }
@@ -90,13 +92,13 @@ public class RegistroController {
     public boolean comprobarCorreoExistenteEnBaseDeDatos(String correo) {
 
         UsuarioDAO uDao = new UsuarioDAO();
-
+        /*
         for (Usuario u : (List<Usuario>) uDao.GetList()) {
             if (u.getCorreo().equals(correo)) {
                 return true;
             }
         }
-
+        */
         return false;
     }
 

@@ -1,10 +1,11 @@
 package edu.uLatina.controller;
 
+import com.componentes.controlador.UsuarioController;
 import com.componentes.entidades.EItem;
+import com.componentes.entidades.Encuesta;
 import com.componentes.entidades.Formulario;
 import com.componentes.entidades.Item;
 import com.componentes.entidades.Seccion;
-import com.componentes.logica.UsuarioLog;
 import edu.uLatina.model.OpcionTexto;
 import edu.uLatina.model.SeleccionMultiple;
 import java.util.ArrayList;
@@ -182,12 +183,16 @@ public class ControladorTableDate {
     }
 
     public void guardarFormulario() {
-
-        List<Formulario> listaFormulario = new ArrayList<>();
+        
+        UsuarioController uC = new UsuarioController();
+        
+        Encuesta encuesta = new Encuesta();
+        encuesta.setUsuarioPadre(this.usuario.getUser());
+        
+        List<Encuesta> encuestas = new ArrayList<>();
         List<Seccion> secciones = new ArrayList<>();
 
         frm = new Formulario();
-        frm.setUsuarioPadre(usuario.getUser());
         frm.setNombre(this.nombreFormulario);
         frm.setFavorito(false);
 
@@ -234,14 +239,17 @@ public class ControladorTableDate {
 
         }
         frm.SetSecciones(secciones);
-
+        frm.setEncuesta(encuesta);
+        
+        encuesta.setFrmScaffolding(frm);
+        
         if (!frm.GetSecciones().isEmpty() && !frm.getNombre().equalsIgnoreCase("")) {
-            listaFormulario.add(frm);
-
-            UsuarioLog usLog = new UsuarioLog();
-
-            usLog.guardarFormularioUsuario(listaFormulario, this.usuario.getUser());
-
+            encuestas.add(encuesta);
+            
+            this.usuario.getUser().setEncuestas(encuestas);
+            
+            uC.Update(this.usuario.getUser());
+            
             this.nombreFormulario = "";
 
             this.listaSecciones.clear();

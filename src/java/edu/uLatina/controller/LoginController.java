@@ -5,8 +5,11 @@
  */
 package edu.uLatina.controller;
 
+import com.componentes.controlador.EncuestaController;
+import com.componentes.controlador.UsuarioController;
 import com.componentes.dao.FormularioDAO;
 import com.componentes.dao.UsuarioDAO;
+import com.componentes.entidades.Encuesta;
 import com.componentes.entidades.Formulario;
 import com.componentes.entidades.Usuario;
 import java.util.ArrayList;
@@ -104,10 +107,10 @@ public class LoginController {
 
         } else {
 
-            UsuarioDAO uDao = new UsuarioDAO();
+            UsuarioController uController = new UsuarioController();
 
             //Busca si el username y password esta en la database
-            this.user = (Usuario) uDao.login(this.username, this.password);
+            this.user = uController.Login(this.username, this.password);
 
             if (user != null) {
 
@@ -164,20 +167,26 @@ public class LoginController {
 
     public void cargarListaFormulariosTodos() {
 
-        FormularioDAO fD = new FormularioDAO();
+        EncuestaController eC = new EncuestaController();
 
-        for (Formulario f : fD.GetList()) {
-            this.listaFormulariosTodos.add(f);
+        for (Encuesta encuesta : eC.Get()) {
+
+            for (Formulario f : encuesta.getRespuestas()) {
+                this.listaFormulariosTodos.add(f);
+            }
+
         }
 
     }
 
     public void cargarListaFormularios() {
 
-        FormularioDAO fD = new FormularioDAO();
+        EncuestaController eC = new EncuestaController();
 
-        for (Formulario f : fD.buscarFormulariosUsuario(this.getUser())) {
-            this.listaFormularios.add(f);
+        for (Encuesta encuesta : eC.Get(this.user)) {
+            for (Formulario f : encuesta.getRespuestas()) {
+                this.listaFormularios.add(f);
+            }
         }
 
     }
@@ -199,7 +208,5 @@ public class LoginController {
         }
 
     }
-
-    
 
 }

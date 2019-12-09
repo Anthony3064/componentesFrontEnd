@@ -5,9 +5,11 @@
  */
 package edu.uLatina.controller;
 
+import com.componentes.controlador.EncuestaController;
 import com.componentes.dao.FormularioDAO;
 import com.componentes.dao.ItemDAO;
 import com.componentes.dao.SeccionDAO;
+import com.componentes.entidades.Encuesta;
 import com.componentes.entidades.Formulario;
 import com.componentes.entidades.Item;
 import com.componentes.entidades.Seccion;
@@ -40,7 +42,9 @@ public class FormController {
 
     private List<Seccion> listaSecciones = new ArrayList<>();
     private String link = "";
-
+    private String tempEmail = "";
+    
+    
     public Usuario getU() {
         return u;
     }
@@ -50,7 +54,7 @@ public class FormController {
     }
 
     private int formId;
-    private Formulario form;
+    private Formulario form = null;
     private List<Seccion> secciones;
     private List<Item> items;
     private Usuario u;
@@ -109,13 +113,23 @@ public class FormController {
         this.items = items;
     }
 
+    public String getTempEmail() {
+        return tempEmail;
+    }
+
+    public void setTempEmail(String tempEmail) {
+        this.tempEmail = tempEmail;
+    }
+
+    
+    
     public void validateId(int id) {
         try {
 
             if (id != 0) {
                 this.listaSeccionOpcionTexto.clear();
                 this.listaSeccionSeleccionMultiple.clear();
-                
+
                 this.retrieveForm(id);
                 HttpServletRequest request = (HttpServletRequest) FacesContext
                         .getCurrentInstance().getExternalContext().getRequest();
@@ -136,49 +150,57 @@ public class FormController {
     public String linkCompartir(int id) {
 
         String link = "http://localhost:8080/CreadorDeFormularios" + "/?id=" + String.valueOf(id) + "";
-        
-       return link;
+
+        return link;
     }
 
     public void retrieveForm(int id) {
 
-        FormularioDAO fd = new FormularioDAO();
-        form = fd.Get(id);
-        SeccionDAO sd = new SeccionDAO();
-        secciones = sd.seccionesEnFormulario(form);
-        ItemDAO ids = new ItemDAO();
-        for (Seccion ss : secciones) {
-            ss.SetItem(ids.itemsEnSecciones(ss));
-        }
-        form.SetSecciones(secciones);
+        Encuesta encuesta = null;
+        EncuestaController eC = new EncuestaController();
 
-        for (Seccion s : form.GetSecciones()) {
-            if (s.getItem().size() == 4) {
+        encuesta = eC.Get(id);
 
-                SeleccionMultiple sM = new SeleccionMultiple();
+        if (encuesta != null) {
+            this.form = encuesta.getFrmScaffolding();
+            
+            SeccionDAO sd = new SeccionDAO();
+            secciones = sd.seccionesEnFormulario(form);
+            ItemDAO ids = new ItemDAO();
+            for (Seccion ss : secciones) {
+                ss.SetItem(ids.itemsEnSecciones(ss));
+            }
+            form.SetSecciones(secciones);
 
-                sM.setPregunta(s.getPregunta());
-                sM.getRespuestas().clear();
-                for (Item item : s.getItem()) {
-                    sM.getRespuestas().add(item.getDefaultName());
+            for (Seccion s : form.GetSecciones()) {
+                if (s.getItem().size() == 4) {
+
+                    SeleccionMultiple sM = new SeleccionMultiple();
+
+                    sM.setPregunta(s.getPregunta());
+                    sM.getRespuestas().clear();
+                    for (Item item : s.getItem()) {
+                        sM.getRespuestas().add(item.getDefaultName());
+                    }
+
+                    this.listaSeccionSeleccionMultiple.add(sM);
                 }
 
-                this.listaSeccionSeleccionMultiple.add(sM);
-            }
+                if (s.getItem().size() == 1) {
 
-            if (s.getItem().size() == 1) {
+                    OpcionTexto oT = new OpcionTexto();
+                    oT.setPregunta(s.getPregunta());
 
-                OpcionTexto oT = new OpcionTexto();
-                oT.setPregunta(s.getPregunta());
+                    for (Item item : s.getItem()) {
 
-                for (Item item : s.getItem()) {
+                        oT.setRespuesta(item.getDefaultName());
 
-                    oT.setRespuesta(item.getDefaultName());
+                    }
 
+                    this.listaSeccionOpcionTexto.add(oT);
                 }
-
-                this.listaSeccionOpcionTexto.add(oT);
             }
+
         }
 
     }
@@ -247,21 +269,27 @@ public class FormController {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("parapropruebas@gmail.com"));
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse("parapropruebas@gmail.com"));
+                    InternetAddress.parse(this.tempEmail));
             message.setSubject("Link del formulario");
             message.setText("Hola ,"
                     + "\n\n Este es el link del formulario que usted solicitó: " + link);
 
             Transport.send(message);
             FacesMessage messages = new FacesMessage(FacesMessage.SEVERITY_INFO, "Informe", "El correo se envio exitosamente..");
-            FacesContext.getCurrentInstance().addMessage(null, messages); 
-
+            FacesContext.getCurrentInstance().addMessage(null, messages);
+            this.tempEmail = "";
         } catch (MessagingException e) {
             FacesMessage messages = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "El correo no se pudo enviar.");
             FacesContext.getCurrentInstance().addMessage(null, messages);
             throw new RuntimeException(e);
 
         }
+    }
+
+    public void asignarId(int id){
+        
+        this.formId = id;
+    
     }
     
 }
