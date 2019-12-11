@@ -141,21 +141,20 @@ public class ControladorTableDate {
         this.textoRendered = false;
     }
     
-    public boolean seleccionFormulario(){
+    public void seleccionFormulario(){
         
         if (tipo.equals("Texto")){
             
             this.seleccionMultipleRendered = false;
             textoRendered = true;
-            return this.textoRendered;
-        }
-        else if (tipo.equals("Seleccion Multiple")){
+            
+        }else if (tipo.equals("Seleccion Multiple")){
             
             this.textoRendered = false;
             this.seleccionMultipleRendered = true;
             
         }
-        return this.seleccionMultipleRendered;
+        
     }
     
     
