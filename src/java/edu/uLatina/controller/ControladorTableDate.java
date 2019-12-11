@@ -15,6 +15,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -28,7 +29,6 @@ public class ControladorTableDate {
     private LoginController usuario;
 
     @ManagedProperty("#{ControllerFormulario}")
-    private ControllerFormulario lista;
     private String nombreFormulario;
     private String pregunta;
     private String respuesta;
@@ -40,6 +40,10 @@ public class ControladorTableDate {
     private List<SeleccionMultiple> listaSecciones = new ArrayList<>();
     private Formulario frm = null;
 
+    private String tipo = "";
+    private boolean seleccionMultipleRendered = false;
+    private boolean textoRendered = false;
+    
     public ControladorTableDate() {
 
     }
@@ -50,14 +54,6 @@ public class ControladorTableDate {
 
     public void setListaSecciones(List<SeleccionMultiple> listaSecciones) {
         this.listaSecciones = listaSecciones;
-    }
-
-    public ControllerFormulario getLista() {
-        return lista;
-    }
-
-    public void setLista(ControllerFormulario lista) {
-        this.lista = lista;
     }
 
     public String getPregunta() {
@@ -116,6 +112,53 @@ public class ControladorTableDate {
         this.nombreFormulario = nombreFormulario;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public boolean isSeleccionMultipleRendered() {
+        return seleccionMultipleRendered;
+    }
+
+    public void setSeleccionMultipleRendered(boolean seleccionMultipleRendered) {
+        this.seleccionMultipleRendered = seleccionMultipleRendered;
+    }
+
+    public boolean isTextoRendered() {
+        return textoRendered;
+    }
+
+    public void setTextoRendered(boolean textoRendered) {
+        this.textoRendered = textoRendered;
+    }
+
+    public void esconder(){
+        this.seleccionMultipleRendered = false;
+        this.textoRendered = false;
+    }
+    
+    public boolean seleccionFormulario(){
+        
+        if (tipo.equals("Texto")){
+            
+            this.seleccionMultipleRendered = false;
+            textoRendered = true;
+            return this.textoRendered;
+        }
+        else if (tipo.equals("Seleccion Multiple")){
+            
+            this.textoRendered = false;
+            this.seleccionMultipleRendered = true;
+            
+        }
+        return this.seleccionMultipleRendered;
+    }
+    
+    
     public void llenarListaSeccion() {
 
         SeleccionMultiple sm = new SeleccionMultiple();
@@ -178,10 +221,23 @@ public class ControladorTableDate {
 
     }
 
-    public void llenarLista() {
-        this.listaSecciones = this.lista.getListaSelecciones();
-    }
+    public void redireccionACrearFormulario() {
+        try {
 
+            HttpServletRequest request = (HttpServletRequest) FacesContext
+                    .getCurrentInstance().getExternalContext().getRequest();
+            FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .redirect(
+                            request.getContextPath()
+                            + "/faces/CrearFormulario.xhtml?faces-redirect=true");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    
     public void guardarFormulario() {
         
         UsuarioController uC = new UsuarioController();
@@ -256,9 +312,13 @@ public class ControladorTableDate {
             this.listaSeccionesTexto.clear();
 
             this.limpiar();
-
+            this.esconder();
+            
+            this.usuario.redireccionALandingPage(usuario.getUser());
+            
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Se guardó con éxito.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
+            
         } else {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Por favor llene la pregunta o las secciones.");
             FacesContext.getCurrentInstance().addMessage(null, msg);

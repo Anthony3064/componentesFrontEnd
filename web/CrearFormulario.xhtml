@@ -68,12 +68,12 @@ and open the template in the editor.
                 <p:remoteCommand name="rc2" actionListener="#{dataTableController.llenarListaOpcionTexto()}" update="tableText"/>
 
                 <h:panelGrid id="panelGrid1" columns="3" style="align-content: center; justify-content: center; display: flex; width: 100%">
-                    <p:commandButton value="+" action="#{controllerFormulario.seleccionFormulario()}" update="formularios" />
-                    <p:commandButton value="-" action="#{controllerFormulario.esconder()}" update="formularios" />
+                    <p:commandButton value="+" action="#{dataTableController.seleccionFormulario()}" update="formularios" />
+                    <p:commandButton value="-" action="#{dataTableController.esconder()}" update="formularios" />
                     <br/>
                     <p:outputLabel for="@next" value="Tipo de Pregunta:" />
 
-                    <p:selectOneMenu value="#{controllerFormulario.tipo}" style="width:100%;">
+                    <p:selectOneMenu value="#{dataTableController.tipo}" style="width:100%;">
                         <f:selectItem itemLabel="Seleccione uno" itemValue="" />
                         <f:selectItem itemLabel="Seleccion Multiple" itemValue="Seleccion Multiple" />
                         <f:selectItem itemLabel="Texto" itemValue="Texto" />
@@ -81,7 +81,7 @@ and open the template in the editor.
 
                 </h:panelGrid>
 
-                <h:form id="formularioPreguntaText" style="width: 50%; border: black solid 2px;margin: 10px auto;" rendered="#{controllerFormulario.textoRendered}">
+                <h:form id="formularioPreguntaText" style="width: 50%; border: black solid 2px;margin: 10px auto;" rendered="#{dataTableController.textoRendered}">
 
                     <p:panelGrid style="width: 100%; margin: 10px auto;" columns="1">
                         <p:inputText placeholder="Pregunta:" value="#{dataTableController.pregunta}" style=" width: 90%;"/>
@@ -91,7 +91,7 @@ and open the template in the editor.
                     <p:commandButton style="margin: 20px auto" value="Agregar" onclick="rc2()" update=":formularios" />
                 </h:form> 
 
-                <h:form id="formularioSelectOne" style="width: 50%; border: black solid 2px;margin: 10px auto;" rendered="#{controllerFormulario.seleccionMultipleRendered}">
+                <h:form id="formularioSelectOne" style="width: 50%; border: black solid 2px;margin: 10px auto;" rendered="#{dataTableController.seleccionMultipleRendered}">
                     <p:panelGrid style="width: 100%; margin: 10px auto;" columns="1">
                         <p:inputText placeholder="Pregunta:" value="#{dataTableController.pregunta}" style=" width: 90%;"/>
                     </p:panelGrid>

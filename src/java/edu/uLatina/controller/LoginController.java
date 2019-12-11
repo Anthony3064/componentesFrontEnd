@@ -7,8 +7,6 @@ package edu.uLatina.controller;
 
 import com.componentes.controlador.EncuestaController;
 import com.componentes.controlador.UsuarioController;
-import com.componentes.dao.FormularioDAO;
-import com.componentes.dao.UsuarioDAO;
 import com.componentes.entidades.Encuesta;
 import com.componentes.entidades.Formulario;
 import com.componentes.entidades.Usuario;
