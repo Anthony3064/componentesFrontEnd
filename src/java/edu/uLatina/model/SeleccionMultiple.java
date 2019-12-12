@@ -16,6 +16,7 @@ public class SeleccionMultiple {
 
 private String pregunta;
 private List<String> respuestas=new ArrayList<String>();
+private String respuestaFinal;
 
     public SeleccionMultiple() {
         
@@ -44,5 +45,15 @@ private List<String> respuestas=new ArrayList<String>();
     public void setRespuestas(List<String> respuestas) {
         this.respuestas = respuestas;
     }
+
+    public String getRespuestaFinal() {
+        return respuestaFinal;
+    }
+
+    public void setRespuestaFinal(String respuestaFinal) {
+        this.respuestaFinal = respuestaFinal;
+    }
+    
+    
     
 }

@@ -39,16 +39,16 @@ and open the template in the editor.
                     <p:column headerText="Preguntas">
                         <p:panelGrid columns="1" style="margin: 10px ;">
                             <p:outputLabel value="#{scc.pregunta}" />
-                            <p:selectOneRadio id="opciones" unselectable="true" style="margin: 0 auto;" >
+                            
+                            <p:selectOneRadio id="opciones" value="#{scc.respuestaFinal}" unselectable="true" style="margin: 0 auto;" >
 
-                                <f:selectItem itemValue="#{scc.respuestas[0]}" itemLabel="#{scc.respuestas[0]}" />
-                                <f:selectItem itemValue="#{scc.respuestas[1]}" itemLabel="#{scc.respuestas[1]}" />
-                                <f:selectItem itemValue="#{scc.respuestas[2]}" itemLabel="#{scc.respuestas[2]}" />
-                                <f:selectItem itemValue="#{scc.respuestas[3]}" itemLabel="#{scc.respuestas[3]}" />
+                                <f:selectItems value="#{scc.respuestas}" var="sc" itemLabel="#{sc}" itemValue="#{sc}"/>
 
                             </p:selectOneRadio>
+                            
                         </p:panelGrid>
                     </p:column>
+                     
                 </p:dataTable>
 
                 <p:dataTable id="tableText" var="seccion" value="#{formController.listaSeccionOpcionTexto}" rendered="#{formController.listaSeccionOpcionTexto.size() > 0 eq true}" style="margin: 20px auto;">
@@ -63,15 +63,10 @@ and open the template in the editor.
                     </p:column>
                 </p:dataTable>
 
-            </h:form>
-
-
-            <h:form style="width: 100%; border: black solid 2px;margin: 10px auto;">
-
                 <p:panelGrid columns="1" style="margin: 20px auto;">
-                    <p:commandButton value="Confirmar" actionListener="#{dataTableController.guardarFormulario()}" update=":formularios" />
+                    <p:commandButton value="Confirmar" actionListener="#{formController.alimentarFormulario()}" />
                 </p:panelGrid>
-
+                
             </h:form>
 
         </p:panel>

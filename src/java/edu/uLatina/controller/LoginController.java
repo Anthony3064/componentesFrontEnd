@@ -13,18 +13,10 @@ import com.componentes.entidades.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -169,9 +161,7 @@ public class LoginController {
 
         for (Encuesta encuesta : eC.Get()) {
 
-            for (Formulario f : encuesta.getRespuestas()) {
-                this.listaFormulariosTodos.add(f);
-            }
+            this.listaFormulariosTodos.add(encuesta.getFrmScaffolding());
 
         }
 
@@ -182,9 +172,9 @@ public class LoginController {
         EncuestaController eC = new EncuestaController();
 
         for (Encuesta encuesta : eC.Get(this.user)) {
-            for (Formulario f : encuesta.getRespuestas()) {
-                this.listaFormularios.add(f);
-            }
+            
+            this.listaFormularios.add(encuesta.getFrmScaffolding());
+            
         }
 
     }

@@ -6,9 +6,9 @@
 package edu.uLatina.controller;
 
 import com.componentes.controlador.EncuestaController;
-import com.componentes.dao.FormularioDAO;
 import com.componentes.dao.ItemDAO;
 import com.componentes.dao.SeccionDAO;
+import com.componentes.entidades.EItem;
 import com.componentes.entidades.Encuesta;
 import com.componentes.entidades.Formulario;
 import com.componentes.entidades.Item;
@@ -43,8 +43,7 @@ public class FormController {
     private List<Seccion> listaSecciones = new ArrayList<>();
     private String link = "";
     private String tempEmail = "";
-    
-    
+   
     public Usuario getU() {
         return u;
     }
@@ -121,8 +120,6 @@ public class FormController {
         this.tempEmail = tempEmail;
     }
 
-    
-    
     public void validateId(int id) {
         try {
 
@@ -163,7 +160,7 @@ public class FormController {
 
         if (encuesta != null) {
             this.form = encuesta.getFrmScaffolding();
-            
+
             SeccionDAO sd = new SeccionDAO();
             secciones = sd.seccionesEnFormulario(form);
             ItemDAO ids = new ItemDAO();
@@ -286,10 +283,79 @@ public class FormController {
         }
     }
 
-    public void asignarId(int id){
-        
+    public void asignarId(int id) {
+
         this.formId = id;
-    
+
     }
-    
+
+    public void alimentarFormulario() {
+
+        List<OpcionTexto> tempList = new ArrayList<>();
+        EncuestaController eC = new EncuestaController();
+        List<Formulario> respuestas = new ArrayList<>();
+        
+        for (SeleccionMultiple sM : this.listaSeccionSeleccionMultiple) {
+
+            OpcionTexto oT = new OpcionTexto();
+
+            oT.setPregunta(sM.getPregunta());
+            oT.setRespuesta(sM.getRespuestaFinal());
+
+            System.out.println(oT.getPregunta());
+            System.out.println(oT.getRespuesta());
+
+            tempList.add(oT);
+            
+        }
+
+        for (OpcionTexto oT : this.listaSeccionOpcionTexto) {
+
+            OpcionTexto oT2 = new OpcionTexto();
+
+            oT2.setPregunta(oT.getPregunta());
+            oT2.setRespuesta(oT.getRespuesta());
+
+            System.out.println(oT2.getPregunta());
+            System.out.println(oT2.getRespuesta());
+            
+            tempList.add(oT2);
+            
+        }
+
+        Encuesta encuesta = eC.Get(formId);
+        Formulario formulario = new Formulario();
+        List<Seccion> secciones = new ArrayList<>();
+        formulario.setNombre(this.form.getNombre());
+        formulario.setFavorito(false);
+        
+        for (OpcionTexto oT : tempList) {
+           
+            Seccion seccion = new Seccion();
+            seccion.setFormularioPadre(formulario);
+            seccion.setPregunta(oT.getPregunta());
+            
+            List<Item> item = new ArrayList<>();
+            Item i = new Item();
+            i.setSeccion(seccion);
+            i.setTipoDato(EItem.TextBox);
+            i.setDefaultName(oT.getRespuesta());
+            item.add(i);
+            
+            seccion.SetItem(item);
+            
+            secciones.add(seccion);
+            
+        }
+        
+        formulario.SetSecciones(secciones);
+        formulario.setEncuesta(encuesta);
+        
+        respuestas.add(formulario);
+        
+        encuesta.setRespuestas(respuestas);
+        eC.Update(encuesta);
+        
+    }
+
 }
