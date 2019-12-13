@@ -7,12 +7,6 @@
     <h:head>
         <title>Ingreso</title>
         <style>
-            .mainForm {
-                margin: auto;
-                width: 30%;
-                padding: 150px 0px;
-                padding-left: 100px;                
-            }
             .Bimage{
                 background-image:url(#{request.contextPath}/resources/presentacion/images/660444.jpg);
             }    
@@ -49,15 +43,15 @@
     </h:head>
     <h:body class="Bimage" onload="#{formController.validateId(param['id'])}">
 
-        <h:form class="Bimage" style="margin: 200px auto; width: 80%; align-items: center; text-align: left; background-image:url(resources/presentacion/images/660456.jpg); ">
+        <h:form class="Bimage" style=" width: 100%; align-items: center; text-align: left; background-image:url(resources/presentacion/images/660456.jpg); ">
             <p:messages id="msg" showDetail="true" closable="true">
                 <p:autoUpdate />
             </p:messages>
-            <h:panelGrid class="round" columns="2" style="width: 50%; margin: 30px auto" cellpadding="5">
+            <h:panelGrid class="round" columns="2" style="width: 40%; margin: 30px auto" cellpadding="5">
                 <h1 style="font-weight: bold; width: 100%; color: purple;" >Ingreso al sistema</h1> 
                 <p:graphicImage name="images/logo_formulario_1.png" library="presentacion" width="100" height="150" />
             </h:panelGrid>  
-            <h:panelGrid class="round" columns="2" style="width: 50%; margin: 0px auto" cellpadding="5">
+            <h:panelGrid class="round" columns="2" style="width: 40%; margin: 0px auto" cellpadding="5">
                 <p:outputLabel style="margin-left: 25px" class="label" for="float-input" value="Usuario: " />
                 <p:inputText class="inputText" id="float-input" value="#{loginController.username}" />
                 <p:outputLabel style="margin-left: 25px" class="label" for="float-input2" value="Contraseña: " />

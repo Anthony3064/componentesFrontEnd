@@ -121,6 +121,7 @@ public class FormController {
     }
 
     public void validateId(int id) {
+        this.asignarId(id);
         try {
 
             if (id != 0) {
@@ -355,6 +356,19 @@ public class FormController {
         
         encuesta.setRespuestas(respuestas);
         eC.Update(encuesta);
+        
+        try {
+            HttpServletRequest request = (HttpServletRequest) FacesContext
+                    .getCurrentInstance().getExternalContext().getRequest();
+            FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .redirect(
+                            request.getContextPath()
+                            + "/faces/FormularioRespondido.xhtml?faces-redirect=true"); 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         
     }
 
