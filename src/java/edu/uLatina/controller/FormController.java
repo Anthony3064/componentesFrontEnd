@@ -6,6 +6,7 @@
 package edu.uLatina.controller;
 
 import com.componentes.controlador.EncuestaController;
+import com.componentes.controlador.FormularioController;
 import com.componentes.dao.ItemDAO;
 import com.componentes.dao.SeccionDAO;
 import com.componentes.entidades.EItem;
@@ -156,8 +157,12 @@ public class FormController {
 
         Encuesta encuesta = null;
         EncuestaController eC = new EncuestaController();
-
-        encuesta = eC.Get(id);
+        
+        FormularioController fC = new FormularioController();
+        
+        Formulario form1 = fC.Get(id);
+        
+        encuesta = eC.get(form1);
 
         if (encuesta != null) {
             this.form = encuesta.getFrmScaffolding();
@@ -324,7 +329,7 @@ public class FormController {
             
         }
 
-        Encuesta encuesta = eC.Get(formId);
+        Encuesta encuesta = eC.get(this.form);
         Formulario formulario = new Formulario();
         List<Seccion> secciones = new ArrayList<>();
         formulario.setNombre(this.form.getNombre());
