@@ -30,28 +30,23 @@ and open the template in the editor.
                 height: auto;
             }
         </style>     
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
     </h:head>
     
  
-    <h:body>
+    <h:body onload="#{formController.mostrarDialogo()}">
         <h:form style="border: solid black 2px; border-radius: 5px;">
 
             <p:menubar style="display: flex; align-content: space-between; justify-content: space-between; align-content: space-between;">
 
                 <p:menuitem disabled="true" style=" color: black; margin: 0 auto;" >
                 </p:menuitem>
-                <p:menuitem value="Cerrar sesión" actionListener="#{loginController.cerrarSesion()}" style=" border: solid gray 2px; border-radius: 5px; color: white; background-color: #232323; margin: 0 3px;" />
-            </p:menubar> 
-            
-        </h:form>
-        <div id="gracias">HELLO</div>
-         <script>
-                $(document).ready(function(){
-            $("#gracias").show(3000);
-        });
-    </script>
-
+                <p:menuitem value="FormMaker" style=" border: solid gray 2px; border-radius: 5px; color: white; background-color: #232323; margin: 0 3px;" />
+            </p:menubar>        
+        </h:form>       
+            <p:dialog widgetVar="d" header="Felicitaciones! Sus respuestas fueron enviadas." resizable="true" showEffect="clip" hideEffect="clip">
+                <p:graphicImage name="images/giphy.gif" library="presentacion" />
+            </p:dialog>
     </h:body>
 
 </html>
