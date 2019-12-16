@@ -41,7 +41,7 @@ and open the template in the editor.
 
                 <p:menuitem disabled="true" style=" color: black; margin: 0 auto;" >
                 </p:menuitem>
-                <p:menuitem value="FormMaker" style=" border: solid gray 2px; border-radius: 5px; color: white; background-color: #232323; margin: 0 3px;" />
+                <p:menuitem value="FormMaker" actionListener="#{loginController.redireccionarALogin()}" style=" border: solid gray 2px; border-radius: 5px; color: white; background-color: #232323; margin: 0 3px;" />
             </p:menubar>        
         </h:form>       
             <p:dialog widgetVar="d" header="Felicitaciones! Sus respuestas fueron enviadas." resizable="true" showEffect="clip" hideEffect="clip">
