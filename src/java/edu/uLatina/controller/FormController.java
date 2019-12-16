@@ -328,7 +328,7 @@ public class FormController {
             tempList.add(oT2);
             
         }
-
+ 
         Encuesta encuesta = eC.get(this.form);
         Formulario formulario = new Formulario();
         List<Seccion> secciones = new ArrayList<>();
