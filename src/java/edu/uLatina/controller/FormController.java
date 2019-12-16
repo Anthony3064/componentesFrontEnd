@@ -20,6 +20,9 @@ import edu.uLatina.model.SeleccionMultiple;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -32,6 +35,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -44,7 +48,7 @@ public class FormController {
     private List<Seccion> listaSecciones = new ArrayList<>();
     private String link = "";
     private String tempEmail = "";
-   
+
     public Usuario getU() {
         return u;
     }
@@ -157,11 +161,11 @@ public class FormController {
 
         Encuesta encuesta = null;
         EncuestaController eC = new EncuestaController();
-        
+
         FormularioController fC = new FormularioController();
-        
+
         Formulario form1 = fC.Get(id);
-        
+
         encuesta = eC.get(form1);
 
         if (encuesta != null) {
@@ -300,7 +304,7 @@ public class FormController {
         List<OpcionTexto> tempList = new ArrayList<>();
         EncuestaController eC = new EncuestaController();
         List<Formulario> respuestas = new ArrayList<>();
-        
+
         for (SeleccionMultiple sM : this.listaSeccionSeleccionMultiple) {
 
             OpcionTexto oT = new OpcionTexto();
@@ -312,7 +316,7 @@ public class FormController {
             System.out.println(oT.getRespuesta());
 
             tempList.add(oT);
-            
+
         }
 
         for (OpcionTexto oT : this.listaSeccionOpcionTexto) {
@@ -324,9 +328,9 @@ public class FormController {
 
             System.out.println(oT2.getPregunta());
             System.out.println(oT2.getRespuesta());
-            
+
             tempList.add(oT2);
-            
+
         }
  
         Encuesta encuesta = eC.get(this.form);
@@ -334,34 +338,34 @@ public class FormController {
         List<Seccion> secciones = new ArrayList<>();
         formulario.setNombre(this.form.getNombre());
         formulario.setFavorito(false);
-        
+
         for (OpcionTexto oT : tempList) {
-           
+
             Seccion seccion = new Seccion();
             seccion.setFormularioPadre(formulario);
             seccion.setPregunta(oT.getPregunta());
-            
+
             List<Item> item = new ArrayList<>();
             Item i = new Item();
             i.setSeccion(seccion);
             i.setTipoDato(EItem.TextBox);
             i.setDefaultName(oT.getRespuesta());
             item.add(i);
-            
+
             seccion.SetItem(item);
-            
+
             secciones.add(seccion);
-            
+
         }
-        
+
         formulario.SetSecciones(secciones);
         formulario.setEncuesta(encuesta);
-        
+
         respuestas.add(formulario);
-        
+
         encuesta.setRespuestas(respuestas);
         eC.Update(encuesta);
-        
+
         try {
             HttpServletRequest request = (HttpServletRequest) FacesContext
                     .getCurrentInstance().getExternalContext().getRequest();
@@ -370,11 +374,17 @@ public class FormController {
                     .getExternalContext()
                     .redirect(
                             request.getContextPath()
-                            + "/faces/FormularioRespondido.xhtml?faces-redirect=true"); 
+                            + "/faces/FormularioRespondido.xhtml?faces-redirect=true");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
     }
+
+    public void mostrarDialogo(){
+        PrimeFaces current = PrimeFaces.current(); 
+        current.executeScript("PF('d').show();");
+    }
+    
 
 }
