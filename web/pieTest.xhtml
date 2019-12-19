@@ -47,7 +47,7 @@ and open the template in the editor.
             }        
         </style>
     </h:head>
-    <h:body class="Bimage" onload="#{formController.validateId(param['id'])}">
+    <h:body class="Bimage">
         
         <h:form class="Bimage" style=" width: 100%; align-items: center; text-align: left; background-image:url(resources/presentacion/images/660456.jpg); ">
             <p:messages id="msg" showDetail="true" closable="true">
@@ -56,7 +56,7 @@ and open the template in the editor.
             <h:panelGrid class="round" columns="1" style="width: 40%; margin: 30px auto" cellpadding="5">
                 <h1 style="font-weight: bold; width: 100%; color: purple;" >Ver resultados</h1> 
             </h:panelGrid>  
-            <p:dataTable  var="model" value="#{encuestasPie.conseguirRespuesta()}" rendered="#{encuestasPie.conseguirRespuesta().size() > 0 eq true}" style="margin: 20px auto;" ></p:dataTable>
+            <p:dataTable  var="model" value="#{encuestasPie.conseguirRespuesta(param['id'])}" rendered="#{encuestasPie.conseguirRespuesta().size() > 0 eq true}" style="margin: 20px auto;" ></p:dataTable>
                     
         </h:form>
     </h:body>

@@ -67,6 +67,46 @@ public class EncuestasPie {
         }
         return Modelos;
     }
+    
+    public ArrayList<PieChartModel> conseguirRespuesta(int id) {
+        
+        encuesta = eCon.Get(id);
+        List<Formulario> Formularios = encuesta.getRespuestas();
+        ArrayList<PieChartModel> Modelos = new ArrayList();
+        Formulario sca = encuesta.getFrmScaffolding();
+        List<Seccion> secciones = sca.GetSecciones();
+       
+        for (Seccion s : secciones) {
+            String seccionNombre = s.getPregunta();
+            model = new PieChartModel();
+            model.setTitle(seccionNombre);
+            model.setLegendPosition("e");
+            model.setShowDatatip(true);
+            List<Item> items = s.getItem();
+            for (Item i : items) {
+                String itemNombre = i.getDefaultName();
+                int itemRespuesta = 0;
+                //conseguir sección que calze con seccionNombre
+                //conseguir el item que calce con itemNombre
+                //si calza entonces se le agrega al "itemRespuesta"
+                for (Formulario F : Formularios) {
+                     for (Seccion sec : F.GetSecciones()) {
+                         if (sec.getPregunta().equalsIgnoreCase(seccionNombre)){
+                             for (Item item : sec.getItem()){
+                                 if (item.getDefaultName().equalsIgnoreCase(itemNombre)){
+                                     itemRespuesta++;
+                                 }
+                             }
+                         }
+                     }
+                }
+                model.set(itemNombre, itemRespuesta);
+                Modelos.add(model);
+            }
+
+        }
+        return Modelos;
+    }
 
 
     public EncuestaController geteCon() {
