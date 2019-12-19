@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Formulario Respondido</title>
+        <style>
+            body { 
+                background-color: #ccccff;
+            }
+        </style>
+        <style type="text/css">
+            body .ui-staticmessage.ui-message {
+                width: 100%;
+            }
+        </style>
+        <style type="text/css">
+            .ui-outputlabel {
+                font-weight: bold;
+            }
+
+            .ui-orderlist .ui-orderlist-list {
+                height: auto;
+            }
+        </style>     
+
+    </h:head>
+    
+ 
+    <h:body onload="#{formController.mostrarDialogo()}">
+        <h:form style="border: solid black 2px; border-radius: 5px;">
+
+            <p:menubar style="display: flex; align-content: space-between; justify-content: space-between; align-content: space-between;">
+
+                <p:menuitem disabled="true" style=" color: black; margin: 0 auto;" >
+                </p:menuitem>
+                <p:menuitem value="FormMaker" actionListener="#{loginController.redireccionarALogin()}" style=" border: solid gray 2px; border-radius: 5px; color: white; background-color: #232323; margin: 0 3px;" />
+            </p:menubar>        
+        </h:form>       
+            <p:dialog widgetVar="d" header="Felicitaciones! Sus respuestas fueron enviadas." resizable="true" showEffect="clip" hideEffect="clip">
+                <p:graphicImage name="images/giphy.gif" library="presentacion" />
+            </p:dialog>
+    </h:body>
+
+</html>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>LandingPage</title>
+
+    </h:head>
+    <style>
+        body { 
+            background-color: #ccccff;
+        }
+    </style>
+    <style type="text/css">
+        body .ui-staticmessage.ui-message {
+            width: 100%;
+        }
+    </style>
+    <style type="text/css">
+        .ui-outputlabel {
+            font-weight: bold;
+        }
+
+        .ui-orderlist .ui-orderlist-list {
+            height: auto;
+        }
+    </style>  
+
+    <h:body styleClass="todo">
+
+
+        <h:form style="border: solid black 2px; border-radius: 5px;">
+
+            <p:growl id="messages" showDetail="true" life="2000" />
+            <p:menubar style="display: flex; align-content: space-between; justify-content: space-between; align-content: space-between;">
+
+                <p:menuitem disabled="true" style=" color: black; margin: 0 auto;" >
+                    <p:outputLabel style="width: 100%;" value="Bienvenido #{dataTableController.usuario.username.toString()}" />
+                </p:menuitem>
+                <p:menuitem value="Cerrar sesión" actionListener="#{loginController.cerrarSesion()}" style=" border: solid gray 2px; border-radius: 5px; color: white; background-color: #232323; margin: 0 3px;" />
+
+            </p:menubar>    
+
+        </h:form>
+        <h:form style=" margin: 2px 0; width: 100%; text-align: center; border: solid black 1px; border-radius: 3px; background: blueviolet">
+            <p:commandButton style=" margin: 5px;" value="Crear formulario" actionListener="#{dataTableController.redireccionACrearFormulario()}" />
+        </h:form>
+        <h:form>
+            <p:growl id="messages" showDetail="true" life="2000" />
+            <p:carousel styleClass="carousel" rendered="#{loginController.listaFormularios.size() > 0 eq true}" var="form" value="#{loginController.listaFormularios}" circular="true" headerText="Tus formularios" itemStyle="text-align:center" responsive="true" style="margin-top:0;border: solid gray 2px; border-radius: 5px;">
+                <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
+                    <f:facet name="header">
+                        <p:graphicImage name="images/form.png" library="presentacion" width="100" height="100" />
+                    </f:facet>
+
+                    <h:outputText value="Formulario:" />
+                    <h:outputText value="#{form.nombre}" />
+
+                    <h:outputText value="Link:" />
+                    <p:commandLink value="Ver formulario" actionListener="#{formController.validateId(form.id)}" />
+              
+                    <p:dialog widgetVar="dialogEnviarCorreo">
+                        
+                        <p:panelGrid columns="1" styleClass="dialogEnviarFormulario" >
+                            <p:inputText value="#{formController.tempEmail}" placeholder="Correo:"/>
+                            <p:commandButton value="Enviar por correo" actionListener="#{formController.mandarCorreo(formController.linkCompartir(formController.formId))}" update="@form" style=" width: 100%;"/>   
+                        </p:panelGrid>
+                        
+                    </p:dialog>
+                    
+                    <f:facet name="footer">
+                        <p:commandButton style="margin: 0 25%" value="Enviar por correo" onclick="PF('dialogEnviarCorreo').show();" actionListener="#{formController.asignarId(form.id)}" update="@(.dialogEnviarFormulario)" />
+                    </f:facet>
+              
+                </p:panelGrid>
+                
+            </p:carousel>
+        </h:form>
+        <h:form>
+            <p:growl id="messages" showDetail="true" life="2000" />
+            <p:carousel styleClass="carousel" value="#{loginController.listaFormulariosTodos}" var="form" circular="true" headerText="Formularios recientes" itemStyle="text-align:center" responsive="true" style="margin-top:0;border: solid gray 2px; border-radius: 5px;">
+                <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
+                    <f:facet name="header">
+                        <p:graphicImage name="images/form.png" library="presentacion" width="100" height="100" />
+                    </f:facet>
+
+                    <h:outputText value="Formulario:" />
+                    <h:outputText value="#{form.nombre}" />
+
+                    <h:outputText value="Link:" />
+                    <p:commandLink value="Ver formulario" actionListener="#{formController.validateId(form.id)}" />
+                    
+                    <p:dialog widgetVar="dialogEnviarCorreo2">
+                        
+                        <p:panelGrid columns="1" styleClass="dialogEnviarFormulario" >
+                            <p:inputText value="#{formController.tempEmail}" placeholder="Correo:"/>
+                            <p:commandButton value="Enviar por correo" actionListener="#{formController.mandarCorreo(formController.linkCompartir(formController.formId))}" update="@form" style=" width: 100%;"/>   
+                        </p:panelGrid>
+                        
+                    </p:dialog>
+                    
+                    <f:facet name="footer">
+                        <p:commandButton style="margin: 0 25%" value="Enviar por correo" onclick="PF('dialogEnviarCorreo2').show();" actionListener="#{formController.asignarId(form.id)}" update="@(.dialogEnviarFormulario)" />
+                    </f:facet>
+                    
+                </p:panelGrid>
+            </p:carousel>
+        </h:form> 
+    </h:body>
+</html> 

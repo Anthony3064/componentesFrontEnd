@@ -295,7 +295,7 @@ public class ControladorTableDate {
         }
         frm.SetSecciones(secciones);
         frm.setEncuesta(encuesta);
-        frm.setIsInterface(true);
+        
         encuesta.setFrmScaffolding(frm);
         
         if (!frm.GetSecciones().isEmpty() && !frm.getNombre().equalsIgnoreCase("")) {

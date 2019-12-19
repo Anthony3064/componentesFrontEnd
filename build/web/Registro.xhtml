@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Registro</title>
+    </h:head>
+    <h:body>
+        <style>
+            .mainForm {
+                margin: auto;
+                width: 30%;
+                padding: 150px 0;
+                padding-left: 100px;
+            }
+            body {
+                background-color: #4c00a4;
+            }
+            .label {
+                margin: 2px;
+                color: white;
+                background-color: #4c00a4;                
+            }
+            .inputText{
+                width: 80%;
+            }
+            .btn {
+                background-color: #4c00a4; 
+                border-style: solid;
+                border-width: 2px;
+                border-color: white;
+                padding: 6px;
+                padding-right: 8px;
+                margin: 2px;
+                border-radius:5px;
+                font-size: 20px;
+                color:white;
+            }
+        </style>
+        <h:form style="margin: 150px auto; width: 50%; align-items: center; text-align: left;">
+            <p:messages id="msg" showDetail="true" closable="true">
+                <p:autoUpdate />
+            </p:messages>
+
+            <h1 style="font-weight: bold; width: 100%; color: white; text-align: left; margin-left: 240px " >Registro al sistema</h1>
+            <br></br>
+
+            <h:panelGrid columns="1" style="width: 50%; margin: 0 auto" cellpadding="5">
+                <p:outputLabel class="label" for="float-input" value="Usuario: " />
+                <p:inputText class="inputText" id="float-input" value="#{registroController.username}" placeholder="Usuario: "/>
+                <p:outputLabel class="label" for="float-input2" value="Correo: " />
+                <p:inputText class="inputText" id="float-input2" value="#{registroController.email}" placeholder="Correo: "/>
+                <p:outputLabel class="label" for="float-input3" value="Contraseña: " />
+                <p:password class="inputText" id="float-input3" value="#{registroController.password}" required="true" match="repetir" placeholder="Contraseña: " validatorMessage="Las contraseñas deben coindidir."/>
+                <p:outputLabel class="label" for="repetir" value="Repetir Contraseña: "/>
+                <p:password class="inputText" id="repetir" required="true" placeholder="Repetir Contraseña:"/>                
+                <h:panelGrid columns="1" style="margin: -20px auto;width: 100%; display: flex; justify-content: flex-start; align-items: center;" cellpadding="2">
+                    <p:commandButton class="btn" style="margin: 20px 0 20px 0;" value="Registrar" actionListener="#{registroController.realizarRegistro()}" update="@form" />
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>

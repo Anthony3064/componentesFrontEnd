@@ -20,6 +20,9 @@ import edu.uLatina.model.SeleccionMultiple;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -329,7 +332,7 @@ public class FormController {
             tempList.add(oT2);
 
         }
- 
+
         Encuesta encuesta = eC.get(this.form);
         Formulario formulario = new Formulario();
         List<Seccion> secciones = new ArrayList<>();
