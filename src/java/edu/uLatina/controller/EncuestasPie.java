@@ -92,7 +92,7 @@ public class EncuestasPie {
         List<Formulario> Formularios = encuesta.getRespuestas();
         ArrayList<PieChartModel> Modelos = new ArrayList();
         Formulario sca = encuesta.getFrmScaffolding();
-        List<Seccion> secciones = sca.GetSecciones();
+        secciones = sca.GetSecciones();
        
         for (Seccion s : secciones) {
             String seccionNombre = s.getPregunta();
@@ -100,7 +100,7 @@ public class EncuestasPie {
             model.setTitle(seccionNombre);
             model.setLegendPosition("e");
             model.setShowDatatip(true);
-            List<Item> items = s.getItem();
+            items = s.getItem();
             for (Item i : items) {
                 String itemNombre = i.getDefaultName();
                 int itemRespuesta = 0;
@@ -126,6 +126,7 @@ public class EncuestasPie {
         return Modelos;
     }
     
+    
     public void validateId(int id) {
         this.asignarId(id);
         try {
@@ -134,7 +135,6 @@ public class EncuestasPie {
                 this.listaSeccionOpcionTexto.clear();
                 this.listaSeccionSeleccionMultiple.clear();
 
-                this.conseguirRespuesta(id);
                 HttpServletRequest request = (HttpServletRequest) FacesContext
                         .getCurrentInstance().getExternalContext().getRequest();
                 FacesContext
@@ -142,7 +142,7 @@ public class EncuestasPie {
                         .getExternalContext()
                         .redirect(
                                 request.getContextPath()
-                                + "/faces/pieTest.xhtml?faces-redirect=true");
+                                + "/faces/pieTest.xhtml?faces-redirect=true&id="+id);
 
             }
 
