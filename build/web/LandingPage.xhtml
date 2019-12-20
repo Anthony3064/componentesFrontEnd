@@ -101,7 +101,8 @@ and open the template in the editor.
 
                     <h:outputText value="Link:" />
                     <p:panelGrid columns="1">
-                        <!--<p:commandLink value="Ver resultados" actionListener="#{formController.validateIdRespuestas(form.id)}" /> Los demás usuarios no deben poder ver los resultados de otros-->
+                        <!--No se debe mostrar los resultados de encuestas que no son propias-->
+                        <p:commandLink value="Ver resultados" disabled="true" actionListener="#{formController.validateIdRespuestas(form.id)}" />
                         <p:commandLink value="Ver formulario" actionListener="#{formController.validateId(form.id)}" />
                     </p:panelGrid>
 
