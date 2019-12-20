@@ -36,6 +36,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import org.primefaces.PrimeFaces;
+import org.primefaces.model.chart.PieChartModel;
 
 /**
  *
@@ -64,6 +65,8 @@ public class FormController {
     private Usuario u;
     private List<SeleccionMultiple> listaSeccionSeleccionMultiple = new ArrayList<>();
     private List<OpcionTexto> listaSeccionOpcionTexto = new ArrayList<>();
+    private ArrayList<PieChartModel> models = new ArrayList<>();
+    private List<Seccion> seccionMostrar = new ArrayList<>();
 
     public List<SeleccionMultiple> getListaSeccionSeleccionMultiple() {
         return listaSeccionSeleccionMultiple;
@@ -71,6 +74,14 @@ public class FormController {
 
     public void setListaSeccionSeleccionMultiple(List<SeleccionMultiple> listaSeccionSeleccionMultiple) {
         this.listaSeccionSeleccionMultiple = listaSeccionSeleccionMultiple;
+    }
+
+    public List<Seccion> getSeccionMostrar() {
+        return seccionMostrar;
+    }
+
+    public void setSeccionMostrar(List<Seccion> seccionMostrar) {
+        this.seccionMostrar = seccionMostrar;
     }
 
     public String getLink() {
@@ -381,10 +392,139 @@ public class FormController {
 
     }
 
-    public void mostrarDialogo(){
-        PrimeFaces current = PrimeFaces.current(); 
+    public void mostrarDialogo() {
+        PrimeFaces current = PrimeFaces.current();
         current.executeScript("PF('d').show();");
     }
-    
+
+    public void llenarPieChart(int id) {
+
+        PieChartModel model = new PieChartModel();
+
+        FormularioController fC = new FormularioController();
+
+        for (Formulario f : fC.Get(id).getEncuesta().getRespuestas()) {
+            if (f.isIsInterface()) {
+
+                for (Seccion scc : f.GetSecciones()) {
+
+                    if (scc.getItem().size() == 4) {
+
+                        String seccionNombre = scc.getPregunta();
+                        model = new PieChartModel();
+                        model.setTitle(seccionNombre);
+                        model.setShowDatatip(true);
+                        for (Item i : scc.getItem()) {
+                            model.set(i.getDefaultName(), contador(id, seccionNombre, i.getDefaultName()));
+                        }
+                        //model.set(scc.getItem().get(0).getDefaultName(),contador(id,seccionNombre,i));
+                        //model.set(scc.getItem().get(1).getDefaultName(),12);
+                        //model.set(scc.getItem().get(2).getDefaultName(),12);
+                        //model.set(scc.getItem().get(3).getDefaultName(),12);
+
+                        this.models.add(model);
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    public Integer contador(int id, String pregunta, String item) {
+        FormularioController fC = new FormularioController();
+        int cont = 0;
+        for (Formulario form : fC.Get(id).getEncuesta().getRespuestas()) {
+
+            if (!form.isIsInterface()) {
+                for (Seccion seccion : form.GetSecciones()) {
+                    if (seccion.getPregunta().equalsIgnoreCase(pregunta)) {
+                        for (Item i : seccion.getItem()) {
+                            if (i.getDefaultName().equalsIgnoreCase(item)) {
+                                cont += 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return cont;
+    }
+
+    public void texto(int id) {
+        FormularioController fC = new FormularioController();
+
+        for (Formulario form : fC.Get(id).getEncuesta().getRespuestas()) {
+
+            if (form.isIsInterface()) {
+
+                for (Seccion s : form.GetSecciones()) {
+                    if (s.getItem().size() == 1) {
+                        for (Formulario form2 : fC.Get(id).getEncuesta().getRespuestas()) {
+
+                            if (!form2.isIsInterface()) {
+
+                                for (Seccion s2 : form2.GetSecciones()) {
+                                    if (s2.getPregunta().equalsIgnoreCase(s.getPregunta())) {
+                                        OpcionTexto oT = new OpcionTexto();
+                                        oT.setPregunta(s2.getPregunta());
+                                        oT.setRespuesta(s2.getItem().get(0).getDefaultName());
+                                        this.listaSeccionOpcionTexto.add(oT);
+                                    }
+
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+
+            }
+
+        }
+
+    }
+
+    public void validateIdRespuestas(int id) {
+
+        this.asignarId(id);
+        try {
+
+            if (id != 0) {
+                this.listaSeccionOpcionTexto.clear();
+                this.models.clear();
+                this.texto(id);
+                this.llenarPieChart(id);
+
+                HttpServletRequest request = (HttpServletRequest) FacesContext
+                        .getCurrentInstance().getExternalContext().getRequest();
+                FacesContext
+                        .getCurrentInstance()
+                        .getExternalContext()
+                        .redirect(
+                                request.getContextPath()
+                                + "/faces/pieTest.xhtml?faces-redirect=true");
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public ArrayList<PieChartModel> getModels() {
+        return models;
+    }
+
+    public void setModels(ArrayList<PieChartModel> models) {
+        this.models = models;
+    }
 
 }

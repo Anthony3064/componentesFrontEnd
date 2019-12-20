@@ -65,24 +65,27 @@ and open the template in the editor.
                     <h:outputText value="#{form.nombre}" />
 
                     <h:outputText value="Link:" />
-                    <p:commandLink value="Ver resultados" actionListener="#{encuestasPie.validateId(form.id)}" />
-                    <p:commandLink value="Ver formulario" actionListener="#{formController.validateId(form.id)}" />
-              
+                    <p:panelGrid columns="1">
+                        <p:commandLink value="Ver resultados" actionListener="#{formController.validateIdRespuestas(form.id)}" />
+                        <p:commandLink value="Ver formulario" actionListener="#{formController.validateId(form.id)}" />
+                    </p:panelGrid>
+
+
                     <p:dialog widgetVar="dialogEnviarCorreo">
-                        
+
                         <p:panelGrid columns="1" styleClass="dialogEnviarFormulario" >
                             <p:inputText value="#{formController.tempEmail}" placeholder="Correo:"/>
                             <p:commandButton value="Enviar por correo" actionListener="#{formController.mandarCorreo(formController.linkCompartir(formController.formId))}" update="@form" style=" width: 100%;"/>   
                         </p:panelGrid>
-                        
+
                     </p:dialog>
-                    
+
                     <f:facet name="footer">
                         <p:commandButton style="margin: 0 25%" value="Enviar por correo" onclick="PF('dialogEnviarCorreo').show();" actionListener="#{formController.asignarId(form.id)}" update="@(.dialogEnviarFormulario)" />
                     </f:facet>
-              
+
                 </p:panelGrid>
-                
+
             </p:carousel>
         </h:form>
         <h:form>
@@ -97,21 +100,24 @@ and open the template in the editor.
                     <h:outputText value="#{form.nombre}" />
 
                     <h:outputText value="Link:" />
-                    <p:commandLink value="Ver formulario" actionListener="#{formController.validateId(form.id)}" />
-                    
+                    <p:panelGrid columns="1">
+                        <!--<p:commandLink value="Ver resultados" actionListener="#{formController.validateIdRespuestas(form.id)}" /> Los demás usuarios no deben poder ver los resultados de otros-->
+                        <p:commandLink value="Ver formulario" actionListener="#{formController.validateId(form.id)}" />
+                    </p:panelGrid>
+
                     <p:dialog widgetVar="dialogEnviarCorreo2">
-                        
+
                         <p:panelGrid columns="1" styleClass="dialogEnviarFormulario" >
                             <p:inputText value="#{formController.tempEmail}" placeholder="Correo:"/>
                             <p:commandButton value="Enviar por correo" actionListener="#{formController.mandarCorreo(formController.linkCompartir(formController.formId))}" update="@form" style=" width: 100%;"/>   
                         </p:panelGrid>
-                        
+
                     </p:dialog>
-                    
+
                     <f:facet name="footer">
                         <p:commandButton style="margin: 0 25%" value="Enviar por correo" onclick="PF('dialogEnviarCorreo2').show();" actionListener="#{formController.asignarId(form.id)}" update="@(.dialogEnviarFormulario)" />
                     </f:facet>
-                    
+
                 </p:panelGrid>
             </p:carousel>
         </h:form> 

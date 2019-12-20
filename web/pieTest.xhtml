@@ -56,8 +56,21 @@ and open the template in the editor.
             <h:panelGrid class="round" columns="1" style="width: 40%; margin: 30px auto" cellpadding="5">
                 <h1 style="font-weight: bold; width: 100%; color: purple;" >Ver resultados</h1> 
             </h:panelGrid>  
-            <p:dataTable  var="model" value="#{encuestasPie.conseguirRespuesta(param['id'])}" rendered="#{encuestasPie.conseguirRespuesta().size() > 0 eq true}" style="margin: 20px auto;" ></p:dataTable>
-                    
+            <p:dataTable  var="model" value="#{formController.models}" rendered="#{formController.models.size() > 0 eq true}"  style="margin: 20px auto;" >
+                <p:column>
+                    <p:chart type="pie" model="#{model}" style="width:400px;height:300px" />
+                </p:column>
+            </p:dataTable>
+            
+            <p:dataTable id="tableSelect" var="seccion" value="#{formController.listaSeccionOpcionTexto}" rendered="#{formController.listaSeccionOpcionTexto.size() > 0 eq true}" style="margin: 20px auto;" >
+                <p:column headerText="#{seccion.pregunta}">
+                        <p:panelGrid columns="1" style="margin: 10px ;">
+                            <p:outputLabel value="#{seccion.pregunta}" />
+                            <p:outputLabel value="#{seccion.respuesta}" />
+                        </p:panelGrid>
+                    </p:column>
+                </p:dataTable>        
+            
         </h:form>
     </h:body>
 </html>
